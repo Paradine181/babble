@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Vegans - Babble</title>
+
+        <link rel="stylesheet" href="styles/main.css">
+
+        <script type="text/javascript" src="scripts/main.js"></script>
+	</head>
+
+	<body>
+		<header>
+			<img src="images/logo.png" />
+		</header>
+
+        <nav> </nav>
+
+        <main>
+            <div class="messages">
+                <div class="chat-info">
+                    <h2>Vegans</h2>
+
+                    <dl class="chat-info-counters">
+                        <dt><!-- Messages --></dt>
+                        <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span></span></dd>
+                        <dt><!-- Users --></dt>
+                        <dd class="chat-info-counters-users"><img src="images/users.png" /><span></span></dd>
+                    </dl>
+                </div>
+
+                <ol class="messages-list" id="messages-list"> </ol>
+            </div>
+
+            <form method="POST" action="http:\\localhost:8000">
+                <div class="form-container">
+                    <div class="growable js-growable">
+                        <pre><span></span><br></pre>
+                        <textarea name="message-content"></textarea>
+                    </div>
+                    <input class="submit-button" type="image" src="images/send.png" />
+                </div>
+            </form>
+        </main>
+
+        <!-- registration / login form -->
+        <!-- will appear only if user hasn't signed in with an email address yet -->
+        <div class="modal-overlay">
+            <div class="modal" id="registration-form">
+                <header>
+                    <h2>Sign in to Babble</h2>
+                </header>
+                <form action="">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" />
+                    <div class="form-controls">
+                        <button class="confirm">Sign in</button>
+                        <button class="discard">Discard</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</body>
+</html>

@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+header {
+    background-color: #353744;
+    flex: 0 0 98%;
+    height: 14.28%;
+    padding: 0% 1%;
+    margin: 0;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+header img {
+    height: 70%;
+    width: auto;
+    flex: 0 0 auto;
+}
+
+nav, main {
+    height: 85.72%;
+    max-height: 85.72%;
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    background-color: #61D290;
+    flex: 0 0 18%;
+}
+
+main {
+    background-color: #F6F6F6;
+    flex: 0 0 82%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+@media screen and (min-width: 321px) and (max-width: 638px) {
+  nav { display: none; }  /* show it on small screens */
+  main { flex: 0 0 100%; }
+}
+
+@media screen and (min-width: 639px) {
+  nav { display: block; }   /* hide it elsewhere */
+  main { flex: 0 0 82%; }
+}
+
+.messages {
+    padding: 0 24px;
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.chat-info {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.chat-info h2,
+.chat-info dl,
+.chat-info dt,
+.chat-info dd {
+    display: inline;
+}
+
+.chat-info h2,
+.chat-info dl {
+    flex: 0 0 auto;
+}
+
+.chat-info-counters {
+    height: 14px;
+}
+
+.chat-info-counters dt,
+.chat-info-counters dd,
+.chat-info-counters dd img {
+    margin-left: 0;
+    margin-right: 0;
+    vertical-align: middle;
+}
+
+.chat-info-counters-messages {
+    height: 11px;
+    width: 14px;
+}
+
+.chat-info-counters-users {
+    height: 14px;
+    width: 11px;
+}
+
+.chat-info h2 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+}
+
+.chat-info-counters dd,
+.chat-info-counters dt {
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+}
+
+.messages-list {
+    height: 0px;
+    flex: 1 1 auto;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.message {
+    padding-bottom: 12px;
+}
+
+.avatar {
+    height: 30px;
+    width: 30px;
+    border: 0px solid transparent;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+.message-body {
+    display: inline-block;
+    background-color: #ffffff;
+    border: 1px solid #DFDFDF;
+    border-radius: 10px;
+    max-width: 600px;
+    margin-left: 8px;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.message-body:hover, .message-body:focus {
+    background-color: #EBEDEC;
+    border: 1px solid #D8D8D8;
+    outline: none;
+}
+
+.message-body cite {
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.message-body time {
+    font-family: 'Nunito', sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    margin-left: 1em;
+}
+
+.message-body button {
+    background: url(../images/delete.png);
+    background-repeat: no-repeat;
+    padding: 0;
+    margin: 0;
+    border: none;
+    height: 11px;
+    width: 11px;
+    display: none;
+}
+
+.message-body p {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+main form {
+    flex: 0 0 auto;
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #FFFFFF;
+    border: 1px solid #D7D7D7;
+    padding: 20px 40px 20px 20px;
+}
+
+.growable {
+    flex: 1;
+	position: relative;
+	max-height: 300px;
+	overflow: hidden;
+    margin-right: 20px;
+}
+
+.growable textarea, .growable pre {
+    word-wrap: break-word;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-size: inherit;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.growable textarea {
+	width: 100%;
+	resize: none;
+	border: none;
+	
+	position: absolute;
+	top: 0; left: 0;
+	height: 100%;
+	overflow: visible;
+    outline: none;
+}
+
+.modal-overlay {
+	background-color: rgba(0, 0, 0, 0.7);
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+    z-index: 2;
+}
+
+.modal {
+    display: inline-block;
+	border: 1px solid black;
+	position: fixed;	
+	top: 0;
+	left: 0;	
+	right: 0;
+	bottom: 0;
+    height: auto;
+    width: auto;
+	max-width: 600px;
+	max-height: 300px;
+	margin: auto;
+	background-color: #F6F6F6;
+	box-shadow: 0 0 15px 0 #000000;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.modal-overlay {
+	display: none;
+}
+
+.modal-overlay:target {
+	display: block;
+}
+
+.modal h2 {
+    font-family: inherit;
+    font-size: 14pt;
+    color: #FFFFFF;
+}
+
+.modal form {
+	padding: 20px;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.modal button {
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    color: #000000;
+}
+
+.confirm {
+    background-color: #61D290;
+}
+
+.discard {
+    background-color: #9E9E9E;
+}
+
+.modal form input[type=text],
+.modal form input[type=email],
+.modal form .form-controls {
+    display: inline-block;
+    width: 100%;
+}
+
+.modal form .form-controls {
+    text-align: center;
+}
+
+.modal form button {
+    display: inline-block;
+}
