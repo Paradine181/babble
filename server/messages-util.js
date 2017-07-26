@@ -1,5 +1,7 @@
 (function () {
 
-    
+  function addMessage(message) {
+      
+  }  
 
 }());
