@@ -57,6 +57,7 @@ http.createServer(function (request, response) {
                         var data = JSON.parse(requestBody);
                         switch (data.messageType) {
                                 case "getId":
+                                        console.log('getId');
                                         ++Babble.anonymousId;
                                         var responseData = {
                                                 id: Babble.anonymousId,
@@ -66,6 +67,7 @@ http.createServer(function (request, response) {
                                         response.end(JSON.stringify(new Message("registration", responseData)));
                                         break;
                                 case "newLogIn":
+                                        console.log('newLogIn');
                                         ++Babble.users;
                                         var allUsersResponseData = {
                                                 usersCount: Babble.users
@@ -78,6 +80,7 @@ http.createServer(function (request, response) {
                                         response.end(JSON.stringify(new Message("updateCounters", responseData)));
                                         break;
                                 case "newSignOut":
+                                        console.log('newSignOut');
                                         if (Babble.users > 0) {
                                                 --Babble.users;
                                                 var allUsersResponseData = {
@@ -88,6 +91,7 @@ http.createServer(function (request, response) {
                                         response.end();
                                         break;
                                 case "getMessage":
+                                        console.log('getMessage');
                                         if (Babble.messages.length > data.messageContent.counter) {
                                                 var responseData = {
                                                         usersCount: Babble.users,
@@ -100,6 +104,7 @@ http.createServer(function (request, response) {
                                         }
                                         break;
                                 case "newMessage":
+                                        console.log('newMessage');
                                         var encoding = MD5(data.messageContent.email);
 
                                         var options = {
@@ -145,6 +150,7 @@ http.createServer(function (request, response) {
                                         })
                                         break;
                                 case "deleteMessage":
+                                        console.log('deleteMessage');
                                         var data = {
                                                 usersCount: Babble.users,
                                                 messagesCount: Babble.messages.length,

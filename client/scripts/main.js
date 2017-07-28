@@ -27,7 +27,7 @@
     }
 
     function getMessages(number, callback) {
-        
+
     }
 
     function postMessage(message, callback) {
@@ -55,6 +55,7 @@
         if (method === 'post') {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         }
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
         if (callback) {
             xhr.addEventListener('load', function (e) { 
                 callback(e);
@@ -87,8 +88,11 @@
                 var form = document.querySelector('form');
                 request(form.method, form.action, new RequestData("getId", null), function(e) {
                     var user = {
-                        email: "anonymous#" + JSON.parse(e.target.responseText).messageContent.id,
-                        message: ''
+                        currentMessage: '',
+                        userInfo: {
+                            name: "",
+                            email: "anonymous#" + JSON.parse(e.target.responseText).messageContent.id,
+                        }
                     };
                     localStorage.setItem("babble", JSON.stringify(user));
                     document.querySelector('.modal-overlay').style.display = "none";
@@ -96,7 +100,7 @@
             });
         } else {
             var form = document.querySelector("form");
-            form.elements[0].value = JSON.parse(localUser).message;
+            form.elements[0].value = JSON.parse(localUser).currentMessage;
         }
     }
 

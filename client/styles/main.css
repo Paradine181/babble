@@ -10,17 +10,17 @@ html, body {
 
 body {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     align-items: stretch;
 }
 
-header {
+body > header {
     background-color: #353744;
-    flex: 0 0 98%;
-    height: 14.28%;
-    padding: 0% 1%;
+    flex: 0 0 auto;
     margin: 0;
+    height: 5em;
+    padding: 0 1em;
 
     display: flex;
     flex-direction: row;
@@ -28,62 +28,95 @@ header {
     align-items: center;
 }
 
-header img {
+body > header h1 {
+    display: none;
+}
+
+body > header img {
     height: 70%;
     width: auto;
     flex: 0 0 auto;
 }
 
-nav, main {
-    height: 85.72%;
-    max-height: 85.72%;
-    padding: 0;
-    margin: 0;
+section {
+    flex: 1;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
 }
 
-nav {
+section nav,
+section main {
+    height: 100%;
+}
+
+section nav {
     background-color: #61D290;
-    flex: 0 0 18%;
+    flex: 0 0 11.5em;
 }
 
-main {
+section main {
     background-color: #F6F6F6;
-    flex: 0 0 82%;
+    flex: 1 1 auto;
+
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
 }
 
-@media screen and (min-width: 0) and (max-width: 320px) {
-    nav { display: none; }
-}
+section main .chat-room {
+    padding: 0;
+    flex: 1 1 auto;
 
-@media screen and (min-width: 321px) and (max-width: 638px) {
-    nav { display: none; }  /* show it on small screens */
-    main { flex: 0 0 100%; }
-}
-
-@media screen and (min-width: 639px) {
-    nav { display: block; }   /* hide it elsewhere */
-    main { flex: 0 0 82%; }
-}
-
-.messages {
-    padding: 0 24px;
-    flex: 1;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
     align-items: stretch;
 }
 
-.chat-info {
+section main .form-container {
     flex: 0 0 auto;
+    max-height: 300px;
     width: 100%;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.chat-room .chat-info {
+    flex: 0 0 auto;
+    padding: 0 1.5em 0 3em;
+    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+}
+
+.chat-room .chat-info h2 {
+    margin: 0.7em 0;
+    padding: 0;
+}
+
+.chat-room .chat-info dt span {
+    display: none;
+}
+
+@media screen and (min-width: 0) and (max-width: 320px) {
+    nav { display: none; }
+    main { flex: 1 1 auto; }
+}
+
+@media screen and (min-width: 321px) and (max-width: 638px) {
+    nav { display: none; }  /* show it on small screens */
+    main { flex: 1 1 auto; }
+}
+
+@media screen and (min-width: 639px) {
+    nav { display: block; }   /* hide it elsewhere */
+    main { flex: 1 1 auto; }
 }
 
 .chat-info h2,
@@ -99,7 +132,7 @@ main {
 }
 
 .chat-info-counters {
-    height: 14px;
+    height: 1em;
 }
 
 .chat-info-counters dt,
@@ -204,21 +237,19 @@ main {
     font-weight: normal;
 }
 
-main form {
-    flex: 0 0 auto;
-    width: 100%;
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: normal;
-}
+.form-container form {
+    background-color: #FFFFFF;
+    border: 1px solid #D7D7D7;
+    padding: 1em 2em 1em 1em;
 
-.form-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: #FFFFFF;
-    border: 1px solid #D7D7D7;
-    padding: 20px 40px 20px 20px;
+}
+
+.form-container form .submit-button {
+    height: 3em;
+    width: auto;
 }
 
 .growable {
@@ -226,7 +257,7 @@ main form {
 	position: relative;
 	max-height: 300px;
 	overflow: hidden;
-    margin-right: 20px;
+    margin-right: 1em;
 }
 
 .growable textarea, .growable pre {

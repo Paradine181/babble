@@ -12,51 +12,54 @@
 
 	<body>
 		<header>
-			<img src="images/logo.png" />
+            <img src="images/logo.png" />
+            <h1 aria-label="Babble - Talk freely">Babble - Talk freely</h1>
 		</header>
 
-        <nav> </nav>
+        <section>
+            <nav> </nav>
+            
+            <main>
+                <div class="chat-room">
+                    <header class="chat-info">
+                        <h2 aria-label="Vegans Chat Room">Vegans</h2>
 
-        <main>
-            <div class="messages">
-                <div class="chat-info">
-                    <h2>Vegans</h2>
+                        <dl class="chat-info-counters">
+                            <dt><span aria-label="Number of Messages in Channel"></span></dt>
+                            <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span></span></dd>
+                            <dt><span aria-label="Number of Users in Channel"></span></dt>
+                            <dd class="chat-info-counters-users"><img src="images/users.png" /><span></span></dd>
+                        </dl>
+                    </header>
 
-                    <dl class="chat-info-counters">
-                        <dt><!-- Messages --></dt>
-                        <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span></span></dd>
-                        <dt><!-- Users --></dt>
-                        <dd class="chat-info-counters-users"><img src="images/users.png" /><span></span></dd>
-                    </dl>
+                    <ol aria-label="Chat Messages" class="messages-list" id="messages-list"> </ol>
                 </div>
 
-                <ol class="messages-list" id="messages-list"> </ol>
-            </div>
-
-            <form method="POST" action="http:\\localhost:9000">
-                <div class="form-container">
-                    <div class="growable js-growable">
-                        <pre><span></span><br></pre>
-                        <textarea name="message-content"></textarea>
-                    </div>
-                    <input class="submit-button" type="image" src="images/send.png" />
-                </div>
-            </form>
-        </main>
+                <footer class="form-container">
+                    <form method="POST" action="http:\\localhost:9000">
+                        <div aria-label="Write New Message" class="growable js-growable">
+                            <pre><span></span><br></pre>
+                            <textarea name="message-content"></textarea>
+                        </div>
+                        <input aria-label="Send New Message" class="submit-button" type="image" src="images/send.png" />
+                    </form>
+                </footer>
+            </main>
+        </section>
 
         <!-- registration / login form -->
         <!-- will appear only if user hasn't signed in with an email address yet -->
-        --<div class="modal-overlay">
+        <div class="modal-overlay">
             <div class="modal" id="registration-form">
-                <h2>Who are you?</h2>
+                <h2 aria-label="Registration Form">Who are you?</h2>
                 <form action="">
                 <label for="name">Full name:</label>
-                <input type="text" id="name" />
+                <input type="text" id="name" aria-label="Full Name" />
                 <label for="email">Email:</label>
-                <input type="email" id="email" />
+                <input type="email" id="email" aria-label="Email Address" />
                     <div class="form-controls">
-                        <button class="confirm">Save</button>
-                        <button class="discard">Stay Anonymous</button>
+                        <button class="confirm" aria-label="Save Details">Save</button>
+                        <button class="discard" aria-label="Stay Anonymous">Stay Anonymous</button>
                     </div>
                 </form>
             </div>
