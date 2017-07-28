@@ -33,7 +33,7 @@
                 <ol class="messages-list" id="messages-list"> </ol>
             </div>
 
-            <form method="POST" action="http:\\localhost:8000">
+            <form method="POST" action="http:\\localhost:9000">
                 <div class="form-container">
                     <div class="growable js-growable">
                         <pre><span></span><br></pre>
@@ -46,17 +46,17 @@
 
         <!-- registration / login form -->
         <!-- will appear only if user hasn't signed in with an email address yet -->
-        <div class="modal-overlay">
+        --<div class="modal-overlay">
             <div class="modal" id="registration-form">
-                <header>
-                    <h2>Sign in to Babble</h2>
-                </header>
+                <h2>Who are you?</h2>
                 <form action="">
-                    <label for="email">Email Address:</label>
-                    <input type="email" id="email" />
+                <label for="name">Full name:</label>
+                <input type="text" id="name" />
+                <label for="email">Email:</label>
+                <input type="email" id="email" />
                     <div class="form-controls">
-                        <button class="confirm">Sign in</button>
-                        <button class="discard">Discard</button>
+                        <button class="confirm">Save</button>
+                        <button class="discard">Stay Anonymous</button>
                     </div>
                 </form>
             </div>

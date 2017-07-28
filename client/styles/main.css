@@ -54,14 +54,18 @@ main {
     flex-wrap: wrap;
 }
 
+@media screen and (min-width: 0) and (max-width: 320px) {
+    nav { display: none; }
+}
+
 @media screen and (min-width: 321px) and (max-width: 638px) {
-  nav { display: none; }  /* show it on small screens */
-  main { flex: 0 0 100%; }
+    nav { display: none; }  /* show it on small screens */
+    main { flex: 0 0 100%; }
 }
 
 @media screen and (min-width: 639px) {
-  nav { display: block; }   /* hide it elsewhere */
-  main { flex: 0 0 82%; }
+    nav { display: block; }   /* hide it elsewhere */
+    main { flex: 0 0 82%; }
 }
 
 .messages {

@@ -10,10 +10,39 @@
         poll(0, form);
     });
 
-    window.addEventListener("beforeunload", function() {
+    window.addEventListener('beforeunload', function() {
         var form = document.querySelector('form');
         navigator.sendBeacon(form.action, JSON.stringify(new RequestData("newSignOut", null)));
     });
+
+    function register(userInfo) {
+        var user = {
+            currentMessage: '',
+            userInfo: {
+                name: userInfo.name,
+                email: userInfo.email
+            }
+        };
+        localStorage.setItem("babble", JSON.stringify(user));
+    }
+
+    function getMessages(number, callback) {
+        
+    }
+
+    function postMessage(message, callback) {
+
+    }
+
+    function deleteMessage(id, callback) {
+
+    }
+
+    function getStats(callback) {
+        
+    }
+
+
 
     function RequestData(type, content) {
         this.messageType = type;
