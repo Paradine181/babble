@@ -105,6 +105,7 @@ http.createServer(function (request, response) {
                                         break;
                                 case "newMessage":
                                         console.log('newMessage');
+                                        console.log(JSON.stringify(data));
                                         var encoding = MD5(data.messageContent.email);
 
                                         var options = {

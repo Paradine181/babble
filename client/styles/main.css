@@ -87,7 +87,7 @@ section main .form-container {
 
 .chat-room .chat-info {
     flex: 0 0 auto;
-    padding: 0 1.5em 0 3em;
+    padding: 0 3em 0 1.5em;
     
     display: flex;
     flex-direction: row;

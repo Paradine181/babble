@@ -55,7 +55,7 @@
         if (method === 'post') {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         }
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        //xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
         if (callback) {
             xhr.addEventListener('load', function (e) { 
                 callback(e);
@@ -154,8 +154,8 @@
             }
 
             var data = {
-                email: localUser.email,
-                message: localUser.message
+                email: localUser.userInfo.email,
+                message: localUser.currentMessage
             }
 
             request(form.method, form.action, new RequestData("newMessage", data), null);
