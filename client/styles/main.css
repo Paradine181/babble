@@ -96,12 +96,114 @@ section main .form-container {
 }
 
 .chat-room .chat-info h2 {
-    margin: 0.7em 0;
+    display: inline;
+    margin: 0.6em 0;
     padding: 0;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+}
+
+.chat-room .chat-info dl,
+.chat-room .chat-info dt,
+.chat-room .chat-info dd,
+.chat-room .chat-info dd img,
+.chat-room .chat-info dd span {
+    display: inline;
+    margin: auto 0;
+    vertical-align: middle;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
 }
 
 .chat-room .chat-info dt span {
+    margin: auto 0;
     display: none;
+}
+
+.chat-room .messages-list {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    flex: 1 1 auto;
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.chat-room .messages-list .message {
+    padding: 0 1em 0.5em 1.2em;
+}
+
+.chat-room .messages-list .message .avatar {
+    height: 1.8em;
+    width: 1.8em;
+    border: 0 solid transparent;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+.chat-room .messages-list .message .message-body {
+    display: inline-block;
+    background-color: #ffffff;
+    border: 1px solid #DFDFDF;
+    border-radius: 10px;
+    max-width: 600px;
+    margin-left: 8px;
+    padding: 0.2em 0.4em 0.2em 0.4em;
+    vertical-align: top;
+}
+
+.chat-room .messages-list .message .message-body:hover,
+.chat-room .messages-list .message .message-body:focus {
+    background-color: #EBEDEC;
+    border: 1px solid #D8D8D8;
+    outline: none;
+}
+
+.message-body header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.message-body cite {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75em;
+    font-weight: bold;
+    font-style: normal;
+    margin: auto 0;
+}
+
+.message-body time {
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.7em;
+    font-weight: normal;
+    margin: auto 0.7em;
+}
+
+.message-body button {
+    background: url(../images/delete.png);
+    background-repeat: no-repeat;
+    padding: 0;
+    margin: auto 0 auto 0;
+    border: none;
+    height: 0.75em;
+    width: 0.75em;
+    display: none;
+    vertical-align: middle;
+}
+
+.message-body p {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75em;
+    font-weight: normal;
 }
 
 @media screen and (min-width: 0) and (max-width: 320px) {
@@ -117,124 +219,6 @@ section main .form-container {
 @media screen and (min-width: 639px) {
     nav { display: block; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
-}
-
-.chat-info h2,
-.chat-info dl,
-.chat-info dt,
-.chat-info dd {
-    display: inline;
-}
-
-.chat-info h2,
-.chat-info dl {
-    flex: 0 0 auto;
-}
-
-.chat-info-counters {
-    height: 1em;
-}
-
-.chat-info-counters dt,
-.chat-info-counters dd,
-.chat-info-counters dd img {
-    margin-left: 0;
-    margin-right: 0;
-    vertical-align: middle;
-}
-
-.chat-info-counters-messages {
-    height: 11px;
-    width: 14px;
-}
-
-.chat-info-counters-users {
-    height: 14px;
-    width: 11px;
-}
-
-.chat-info h2 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 14pt;
-    font-weight: normal;
-}
-
-.chat-info-counters dd,
-.chat-info-counters dt {
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: bold;
-}
-
-.messages-list {
-    height: 0px;
-    flex: 1 1 auto;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.message {
-    padding-bottom: 12px;
-}
-
-.avatar {
-    height: 30px;
-    width: 30px;
-    border: 0px solid transparent;
-    border-radius: 50%;
-    vertical-align: top;
-}
-
-.message-body {
-    display: inline-block;
-    background-color: #ffffff;
-    border: 1px solid #DFDFDF;
-    border-radius: 10px;
-    max-width: 600px;
-    margin-left: 8px;
-    padding: 8px;
-    vertical-align: top;
-}
-
-.message-body:hover, .message-body:focus {
-    background-color: #EBEDEC;
-    border: 1px solid #D8D8D8;
-    outline: none;
-}
-
-.message-body cite {
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: bold;
-    font-style: normal;
-}
-
-.message-body time {
-    font-family: 'Nunito', sans-serif;
-    font-size: 8pt;
-    font-weight: normal;
-    margin-left: 1em;
-}
-
-.message-body button {
-    background: url(../images/delete.png);
-    background-repeat: no-repeat;
-    padding: 0;
-    margin: 0;
-    border: none;
-    height: 11px;
-    width: 11px;
-    display: none;
-}
-
-.message-body p {
-    margin: 0;
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: normal;
 }
 
 .form-container form {

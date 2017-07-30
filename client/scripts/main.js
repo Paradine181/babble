@@ -170,6 +170,7 @@
         var li = document.createElement("li");
         var img = document.createElement("img");
         var div = document.createElement("div");
+        var header = document.createElement("header");
         var cite = document.createElement("cite");
         var time = document.createElement("time");
         var del = document.createElement("button");
@@ -183,22 +184,25 @@
         time.textContent = "15:23"
         time.setAttribute("datetime", "2017-5-25 15:23");
 
+        header.setAttribute("class", "message-header");
+        header.appendChild(cite);
+        header.appendChild(time);
+        header.appendChild(del);
+
         p.textContent = message;
 
         div.setAttribute("tabIndex", "0");
         div.setAttribute("class", "message-body");
-        div.appendChild(cite);
-        div.appendChild(time);
-        div.appendChild(del);
+        div.appendChild(header);
         div.appendChild(p);
 
         div.addEventListener("focusin", function() {
-            if (email === JSON.parse(localStorage.getItem("babble")).email) {
+            if (email === JSON.parse(localStorage.getItem("babble")).userInfo.email) {
                 del.style.display = "inline";
             }
         });
         div.addEventListener("mouseenter", function() {
-            if (email === JSON.parse(localStorage.getItem("babble")).email) {
+            if (email === JSON.parse(localStorage.getItem("babble")).userInfo.email) {
                 del.style.display = "inline";
             }
         });
@@ -215,7 +219,6 @@
             var data = {
                 id: id
             }
-            console.log('delete! delete! delete!');
             form = document.querySelector('form');
             request(form.method, form.action, new RequestData("deleteMessage", data), null);
         });
