@@ -11,8 +11,8 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     align-items: stretch;
+    word-wrap: break-word;
 }
 
 body > header {
@@ -24,8 +24,11 @@ body > header {
 
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
+}
+
+img {
+    max-width: 100%;
 }
 
 body > header h1 {
@@ -33,7 +36,8 @@ body > header h1 {
 }
 
 body > header img {
-    height: 70%;
+    object-fit: scale-down;
+    height: 3.5em;
     width: auto;
     flex: 0 0 auto;
 }
@@ -43,7 +47,6 @@ section {
 
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: stretch;
 }
 
@@ -63,7 +66,6 @@ section main {
 
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
 
 section main .chat-room {
@@ -71,14 +73,13 @@ section main .chat-room {
     flex: 1 1 auto;
 
     display: flex;
-    flex-wrap: nowrap;
     flex-direction: column;
     align-items: stretch;
 }
 
 section main .form-container {
-    flex: 0 0 auto;
-    max-height: 300px;
+    /*flex: 1 1 content;*/
+    /*max-height: 300px;*/
     width: 100%;
     font-family: 'Nunito', sans-serif;
     font-size: 9pt;
@@ -91,7 +92,6 @@ section main .form-container {
     
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: space-between;
 }
 
@@ -132,6 +132,7 @@ section main .form-container {
     list-style-type: none;
     overflow-x: hidden;
     overflow-y: auto;
+    word-wrap: break-word;
 }
 
 .chat-room .messages-list .message {
@@ -168,7 +169,6 @@ section main .form-container {
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
 }
 
 .message-body cite {
@@ -217,7 +217,7 @@ section main .form-container {
 }
 
 @media screen and (min-width: 639px) {
-    nav { display: block; }   /* hide it elsewhere */
+    nav { display: blocinlink; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
 }
 
@@ -228,7 +228,6 @@ section main .form-container {
 
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
 }
 
 .form-container form .submit-button {

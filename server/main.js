@@ -1,14 +1,15 @@
 var http = require('http'),
         https = require('https'),
-        urlUtil = require('url'),
-        queryUtil = require('querystring');
+        url = require('url');
 
 var Babble = {
         messages: [],
         clients: [],
         users: 0,
         anonymousId: 0,
-        messageId: 0
+        messageId: 0,
+        methods: [ 'GET', 'POST', 'DELETE', 'OPTIONS' ],
+        pathnames: [ 'messages', 'stats', 'login', 'logout' ]
 };
 
 function Message(type, content) {
@@ -47,7 +48,165 @@ function messageAllUsers(message) {
 }
 
 http.createServer(function (request, response) {
+        var requestedUrl = url.parse(request.url, true);
+        var queryObject = requestedUrl.query;
+        var pathname = requestedUrl.pathname;
+        if (pathname.indexOf('?') >= 0) {
+                pathname = pathname.substring(0, pathname.indexOf('?'));
+        }
+        var pathnameArray = pathname.split('/');
+        var messageId = '/';
+        if (pathnameArray.length > 2) {
+                messageId += pathnameArray[2];
+        }
+
         response.setHeader('Access-Control-Allow-Origin', '*');
+        response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+        response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
+        if (!Babble.methods.includes(request.method)) { // check for valid method: GET/POST/DELETE/OPTIONS. if not one of them, return status 405
+                response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else if (request.method === "OPTIONS") { // check for method "OPTIONS". if it's that, return status 204
+                response.writeHead(204, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else if (!Babble.pathnames.includes(pathnameArray[1])) { // check for valid first part of pathname: "messages" or "stats". if not one of them, return status 404
+                response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else if (pathnameArray.length < 2 || pathnameArray.length > 3 || (pathnameArray.length === 3 && pathnameArray[1] !== Babble.pathnames[0])) { // check for valid pathname
+                response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else if (pathnameArray.length === 3 && (!Number.isInteger(parseInt(pathnameArray[2], 10)) || parseInt(pathnameArray[2], 10) < 1 || parseInt(pathnameArray[2], 10) > 7)) {
+                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else if (requestedUrl.search !== '' && (typeof requestedUrl.query.counter === "undefined" || !Number.isInteger(parseInt(requestedUrl.query.counter, 10)) || JSON.stringify(requestedUrl.query) !== JSON.stringify({ counter: requestedUrl.query.counter }))) {
+                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end();
+        } else {
+                switch (requestedUrl.href) {
+                        case "/login":
+                                if (request.method === Babble.methods[0]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        case "/logout":
+                                if (request.method === Babble.methods[1]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        case "/messages?" + JSON.stringify(queryObject):
+                                if (request.method === Babble.methods[0]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        case "/messages":
+                                if (request.method === Babble.methods[1]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        case "/messages" + messageId:
+                                if (request.method === Babble.methods[2]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        case "/stats":
+                                if (request.method === Babble.methods[0]) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                                break;
+                        default:
+                                response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                                response.end();
+                }
+        }
+
+        return;
+        switch (request.method) {
+                case "GET":
+                        switch (requestedUrl.pathname) {
+                                case "/messages":
+                                        if ((typeof requestedUrl.query.counter !== "undefined") && (Number.isInteger(parseInt(requestedUrl.query.counter, 10))) && (requestedUrl.query === { counter: parseInt(requestedUrl.query.counter, 10)})) {
+                                                response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                                response.end(JSON.stringify({Success: true, Author: 'Ilia'}));
+                                        } else {
+                                                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                                                response.end();
+                                        }
+                                        break;
+                                case "/stats":
+                                        if (requestedUrl.search === "") {
+                                                response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                                response.end(JSON.stringify({Success: true, Author: 'IliaB'}));
+                                        } else {
+                                                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                                                response.end();
+                                        }
+                                        break;
+                                default:
+                                        response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+
+                        }
+                        break;
+                case "POST":
+                        switch (requestedUrl.pathname) {
+                                case "/messages":
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                default:
+                                        response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+
+                        }
+                        break;
+                case "DELETE":
+                        if ((pathnameArray.length == 3) && (pathnameArray[1] === "messages")) {
+                                if ((Number.isInteger(parseInt(pathnameArray[2], 10))) && (pathnameArray[2] == parseInt(pathnameArray[2], 10)) && (parseInt(pathnameArray[2], 10) > 0) && (parseInt(pathnameArray[2], 10) <= Babble.messageId)) {
+                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                } else {
+                                        response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        response.end();
+                                }
+                        } else {
+                                response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
+                                response.end();
+                        }
+                        break;
+                case "OPTIONS":
+                        response.writeHead(204, { 'Content-Type': 'application/json; charset=utf-8' });
+                        response.end();
+                        break;
+                default:
+                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
+                        response.end();
+        }
+        return;
+
         if (request.method === 'POST') {
                 var requestBody = '';
                 request.on('data', function (chunk) {
@@ -115,13 +274,13 @@ http.createServer(function (request, response) {
                                                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
                                                 }
                                         }
-                                        
-                                        https.get(options, function(res) {
+
+                                        https.get(options, function (res) {
                                                 var body = '';
-                                                res.on('data', function(chunk) {
+                                                res.on('data', function (chunk) {
                                                         body += chunk;
                                                 });
-                                                res.on('end', function() {
+                                                res.on('end', function () {
                                                         var avatarUrl = '';
                                                         var userName = '';
                                                         try {

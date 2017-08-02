@@ -12,8 +12,13 @@
 
     window.addEventListener('beforeunload', function() {
         var form = document.querySelector('form');
-        navigator.sendBeacon(form.action, JSON.stringify(new RequestData("newSignOut", null)));
+        navigator.sendBeacon(form.action + '/logout');
     });
+
+    function UserInfo(name, email) {
+        this.name = name;
+        this.email = email;
+    }
 
     function register(userInfo) {
         var user = {
@@ -24,6 +29,28 @@
             }
         };
         localStorage.setItem("babble", JSON.stringify(user));
+    }
+
+    function logIn() {
+        var localUser = localStorage.getItem("babble");
+        if (typeof(Storage) === "undefined" || localUser === null) { // Code for localStorage + getting the username
+            var modal = document.querySelector('.modal-overlay');
+            modal.style.display = "block";
+            var modalConfirm = modal.querySelector('.confirm').addEventListener("click", function() {
+                register(new UserInfo(document.querySelector("#name").value, document.querySelector("#email").value));
+                document.querySelector('.modal-overlay').style.display = "none";
+            });
+            var modalDiscard = modal.querySelector('.discard').addEventListener("click", function() {
+                var form = document.querySelector('form');
+                sendRequestToServer('GET', form.action + 'login', new RequestData("getId", null), function(e) {
+                    register(new UserInfo("Anonymous", "Anonymous#" + JSON.parse(e.target.responseText).messageContent.id));
+                    document.querySelector('.modal-overlay').style.display = "none";
+                });
+            });
+        } else {
+            var form = document.querySelector("form");
+            form.elements[0].value = JSON.parse(localUser).currentMessage;
+        }
     }
 
     function getMessages(number, callback) {
@@ -42,26 +69,31 @@
         
     }
 
+    function sendRequestToServer(method, action, data, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, action);
+        if (method.toUpperCase() === 'POST') {
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        }
+        xhr.addEventListener('load', function (e) {
+            if (xhr.status == "200") {
+                console.log('200!');
+                if (callback) {
+                    callback(e.target.responseText);
+                }
+            } else {
+                console.error('received the following status from server: ' + xhr.status);
+                console.log('received the following status from server: ' + xhr.status);
+            }
+        });
+        xhr.send(JSON.stringify(data));
+    }
+
 
 
     function RequestData(type, content) {
         this.messageType = type;
         this.messageContent = content;
-    }
-
-    function request(method, action, data, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, action);
-        if (method === 'post') {
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        }
-        //xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-        if (callback) {
-            xhr.addEventListener('load', function (e) { 
-                callback(e);
-            });
-        }
-        xhr.send(JSON.stringify(data));
     }
 
     function saveLocalStorage(name, email, message) {
@@ -73,35 +105,6 @@
             }
         };
         localStorage.setItem("babble", JSON.stringify(user));
-    }
-
-    function logIn() {
-        var localUser = localStorage.getItem("babble");
-        if (typeof(Storage) === "undefined" || localUser === null) { // Code for localStorage + getting the username
-            var modal = document.querySelector('.modal-overlay');
-            modal.style.display = "block";
-            var modalConfirm = modal.querySelector('.confirm').addEventListener("click", function() {
-                saveLocalStorage(document.querySelector("#name"), document.querySelector("#email").value, '');
-                document.querySelector('.modal-overlay').style.display = "none";
-            });
-            var modalDiscard = modal.querySelector('.discard').addEventListener("click", function() {
-                var form = document.querySelector('form');
-                request(form.method, form.action, new RequestData("getId", null), function(e) {
-                    var user = {
-                        currentMessage: '',
-                        userInfo: {
-                            name: "",
-                            email: "anonymous#" + JSON.parse(e.target.responseText).messageContent.id,
-                        }
-                    };
-                    localStorage.setItem("babble", JSON.stringify(user));
-                    document.querySelector('.modal-overlay').style.display = "none";
-                });
-            });
-        } else {
-            var form = document.querySelector("form");
-            form.elements[0].value = JSON.parse(localUser).currentMessage;
-        }
     }
 
     function handleIncomingMessage(message) {
@@ -122,8 +125,8 @@
 
     function sendUserSignedIn() {
         var form = document.querySelector('form');
-        request(form.method, form.action, new RequestData("newLogIn", null), function(e) {
-            var message = JSON.parse(e.target.responseText);
+        sendRequestToServer('GET', form.action + 'login', new RequestData("newLogIn", null), function(e) {
+            var message = JSON.parse(e);
             document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = message.messageContent.messagesCount;
             document.querySelector(".chat-info-counters-users").querySelector("span").textContent = message.messageContent.usersCount;
         })
@@ -158,7 +161,7 @@
                 message: localUser.currentMessage
             }
 
-            request(form.method, form.action, new RequestData("newMessage", data), null);
+            sendRequestToServer('POST', form.action + 'messages', new RequestData("newMessage", data), null);
             form.elements[0].value = "";
             localUser.currentMessage = "";
             saveLocalStorage(localUser.userInfo.name, localUser.userInfo.email, '');
@@ -220,7 +223,7 @@
                 id: id
             }
             form = document.querySelector('form');
-            request(form.method, form.action, new RequestData("deleteMessage", data), null);
+            sendRequestToServer('DELETE', form.action + 'messages/' + id, new RequestData("deleteMessage", data), null);
         });
 
         li.setAttribute("id", 'message#' + id);
@@ -235,10 +238,10 @@
         var data = {
             counter: messageCounter
         }
-        request(form.method, form.action, new RequestData("getMessage", data), function(e) {
+        sendRequestToServer('GET', form.action + 'messages?counter=' + (messageCounter + 1), new RequestData("getMessage", data), function(e) {
             var message = JSON.parse(e.target.responseText);
             handleIncomingMessage(message);
             poll(message.messageContent.messagesCount, form);
         });
     }
-}(this.window));    
+}(window.Babble));    
