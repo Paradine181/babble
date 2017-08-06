@@ -1,32 +1,17 @@
 var http = require('http'),
-        https = require('https'),
-        url = require('url');
+    https = require('https'),
+    url = require('url'),
+    usersUtils = require('./users-util'),
+    messagesUtils = require('./messages-util');
+
+
 
 var Babble = {
-        messages: [],
-        clients: [],
-        users: 0,
-        anonymousId: 0,
-        messageId: 0,
-        methods: [ 'GET', 'POST', 'DELETE', 'OPTIONS' ],
-        pathnames: [ 'messages', 'stats', 'login', 'logout' ]
+        methods: [ 'GET', 'POST', 'DELETE', 'OPTIONS' ], // the methods which the RESTful API acceps
+        pathnames: [ 'messages', 'stats', 'login', 'logout' ], // the pathnames the RESTful API recognizes (if matched with correct method and parameters)
+        messagesClients: [],
+        statsClients: []
 };
-
-function Message(type, content) {
-        this.messageType = type;
-        this.messageContent = content;
-}
-
-function Messages(users, messagesList) {
-        this.usersCount = users;
-        this.messagesCount = Babble.messages.length;
-        this.messagesList = messagesList;
-}
-
-function UserClient(client, messagesCount) {
-        this.client = client;
-        this.messagesCount = messagesCount;
-}
 
 function messageEachUser() {
         while (Babble.clients.length > 0) {
@@ -45,6 +30,11 @@ function messageAllUsers(message) {
                 var client = Babble.clients.pop();
                 client.client.end(JSON.stringify(message));
         }
+}
+
+function UserMessagesRequest(response, counter) {
+        this.response = response;
+        this.counter = counter;
 }
 
 http.createServer(function (request, response) {
@@ -84,44 +74,95 @@ http.createServer(function (request, response) {
                 response.end();
         } else {
                 switch (requestedUrl.href) {
-                        case "/login":
+                        case "/login": // usre logged in
                                 if (request.method === Babble.methods[0]) {
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
+                                        response.end(JSON.stringify({id: usersUtils.addUser()}));
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
                                 }
                                 break;
-                        case "/logout":
+                        case "/logout": // user logged out
                                 if (request.method === Babble.methods[1]) {
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                        usersUtils.deleteUser();
                                         response.end();
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
                                 }
                                 break;
-                        case "/messages?" + JSON.stringify(queryObject):
+                        case "/messages?counter=" + queryObject.counter: // get messages request
                                 if (request.method === Babble.methods[0]) {
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
+                                        if (messagesUtils.getMessagesCount() > queryObject.counter) {
+                                                response.end(JSON.stringify(messagesUtils.getMessages(queryObject.counter)));
+                                        } else {
+                                                Babble.messagesClients.push(new UserMessagesRequest(response, queryObject.counter));
+                                        }
+                                        //response.end();
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
                                 }
                                 break;
-                        case "/messages":
+                        case "/messages": // post a message
                                 if (request.method === Babble.methods[1]) {
-                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
+                                        var requestBody = '';
+                                        request.on('data', function (chunk) {
+                                                requestBody += chunk.toString();
+                                        });
+                                        request.on('end', function () {
+                                                var receivedMessage = JSON.parse(requestBody);
+                                                var encoding = MD5(receivedMessage.email);
+                                                var options = {
+                                                        host: 'en.gravatar.com',
+                                                        path: '/' + encoding + '.json',
+                                                        headers: {
+                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+                                                        }
+                                                }
+
+                                                https.get(options, function (res) {
+                                                        var body = '';
+                                                        res.on('data', function (chunk) {
+                                                                body += chunk;
+                                                        });
+                                                        res.on('end', function () {
+                                                                var avatarUrl = '';
+                                                                try {
+                                                                        avatarUrl = JSON.parse(body).entry[0].thumbnailUrl;
+                                                                } catch (err) {
+                                                                        avatarUrl = '';
+                                                                }
+                                                                
+                                                                response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                                                                var id = messagesUtils.addMessage({
+                                                                        name: receivedMessage.name,
+                                                                        email: receivedMessage.email,
+                                                                        avatar: avatarUrl,
+                                                                        message: receivedMessage.message,
+                                                                        timestamp: receivedMessage.timestamp
+                                                                });
+
+                                                                response.end(JSON.stringify({id: id}));
+
+                                                                while (Babble.messagesClients.length > 0) {
+                                                                        var client = Babble.messagesClients.pop();
+                                                                        client.response.end(JSON.stringify(messagesUtils.getMessages(client.counter)));
+                                                                }
+                                                        });
+                                                });
+                                        });
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
                                 }
                                 break;
-                        case "/messages" + messageId:
+                        case "/messages" + messageId: // delete a message
                                 if (request.method === Babble.methods[2]) {
+                                        console.log('delete message');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
                                 } else {
@@ -129,10 +170,11 @@ http.createServer(function (request, response) {
                                         response.end();
                                 }
                                 break;
-                        case "/stats":
+                        case "/stats": // get stats request
                                 if (request.method === Babble.methods[0]) {
+                                        console.log('get stats');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
+                                        response.end(JSON.stringify({users: usersUtils.getUsers(), messages: messagesUtils.getMessagesCount()}));
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
@@ -144,67 +186,6 @@ http.createServer(function (request, response) {
                 }
         }
 
-        return;
-        switch (request.method) {
-                case "GET":
-                        switch (requestedUrl.pathname) {
-                                case "/messages":
-                                        if ((typeof requestedUrl.query.counter !== "undefined") && (Number.isInteger(parseInt(requestedUrl.query.counter, 10))) && (requestedUrl.query === { counter: parseInt(requestedUrl.query.counter, 10)})) {
-                                                response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                                response.end(JSON.stringify({Success: true, Author: 'Ilia'}));
-                                        } else {
-                                                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-                                                response.end();
-                                        }
-                                        break;
-                                case "/stats":
-                                        if (requestedUrl.search === "") {
-                                                response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                                response.end(JSON.stringify({Success: true, Author: 'IliaB'}));
-                                        } else {
-                                                response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-                                                response.end();
-                                        }
-                                        break;
-                                default:
-                                        response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
-
-                        }
-                        break;
-                case "POST":
-                        switch (requestedUrl.pathname) {
-                                case "/messages":
-                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
-                                default:
-                                        response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
-
-                        }
-                        break;
-                case "DELETE":
-                        if ((pathnameArray.length == 3) && (pathnameArray[1] === "messages")) {
-                                if ((Number.isInteger(parseInt(pathnameArray[2], 10))) && (pathnameArray[2] == parseInt(pathnameArray[2], 10)) && (parseInt(pathnameArray[2], 10) > 0) && (parseInt(pathnameArray[2], 10) <= Babble.messageId)) {
-                                        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
-                                } else {
-                                        response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-                                        response.end();
-                                }
-                        } else {
-                                response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
-                                response.end();
-                        }
-                        break;
-                case "OPTIONS":
-                        response.writeHead(204, { 'Content-Type': 'application/json; charset=utf-8' });
-                        response.end();
-                        break;
-                default:
-                        response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
-                        response.end();
-        }
         return;
 
         if (request.method === 'POST') {
@@ -272,7 +253,7 @@ http.createServer(function (request, response) {
                                                 path: '/' + encoding + '.json',
                                                 headers: {
                                                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-                                                }
+``                                                }
                                         }
 
                                         https.get(options, function (res) {

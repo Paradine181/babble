@@ -15,7 +15,13 @@
             var requiredMessages = []
             for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
                 if (messages[i].id > lastRequestedId) {
-                    requiredMessages.push({message: messages[i].message});
+                    requiredMessages.push({
+                        name: messages[i].name,
+                        email: messages[i].email,
+                        avatar: messages[i].avatar,
+                        message: messages[i].message,
+                        timestamp: messages[i].timestamp
+                    });
                     lastRequestedId = messages[i].id;
                 }
             }
@@ -24,7 +30,11 @@
         addMessage: function(message) {
             messages.push({
                 id: ++messageId,
-                message: message.message
+                name: message.name,
+                email: message.email,
+                avatar: message.avatar,
+                message: message.message,
+                timestamp: message.timestamp
             });
             return messageId;
         },

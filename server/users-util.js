@@ -8,15 +8,17 @@
     }
 }(this, function() {
     var users = 0;
+    var userId = 0;
     return {
         getUsers: function() {
             return users;
         },
         addUser: function() {
-            return ++users;
+            ++users;
+            return ++userId;
         },
         deleteUser: function() {
-            return --users;
+            --users;
         }
     };
 }));   

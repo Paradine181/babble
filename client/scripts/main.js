@@ -3,16 +3,21 @@
      window.addEventListener("load", function() {
         var form = document.querySelector('form');
         document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = 0;
+        window.location.href = "http://Paradine181.github.io/babble/#/vegans";
         logIn();
-        sendUserSignedIn();
+        getStats(setStats);
+        getMessages(0, addMessages);
+
         makeGrowable(document.querySelector('.js-growable'));
+
         sendChatMessage(form);
-        poll(0, form);
+
+        //poll(0, form);
     });
 
     window.addEventListener('beforeunload', function() {
         var form = document.querySelector('form');
-        navigator.sendBeacon(form.action + '/logout');
+        navigator.sendBeacon(form.action + 'logout');
     });
 
     function UserInfo(name, email) {
@@ -20,155 +25,74 @@
         this.email = email;
     }
 
-    function register(userInfo) {
-        var user = {
-            currentMessage: '',
-            userInfo: {
-                name: userInfo.name,
-                email: userInfo.email
-            }
-        };
-        localStorage.setItem("babble", JSON.stringify(user));
-    }
-
     function logIn() {
-        var localUser = localStorage.getItem("babble");
-        if (typeof(Storage) === "undefined" || localUser === null) { // Code for localStorage + getting the username
+        var localUser = getLocalStorage();
+        var form = document.querySelector('form');
+        if (typeof(Storage) === 'undefined' || localUser === null) { // Code for localStorage + getting the username
             var modal = document.querySelector('.modal-overlay');
-            modal.style.display = "block";
-            var modalConfirm = modal.querySelector('.confirm').addEventListener("click", function() {
-                register(new UserInfo(document.querySelector("#name").value, document.querySelector("#email").value));
+            modal.style.display = 'block';
+            var modalConfirm = modal.querySelector('.confirm').addEventListener('click', function() {
+                register(new UserInfo(document.querySelector('#name').value, document.querySelector('#email').value));
+                document.querySelector('.modal-overlay').style.display = 'none';
+            });
+            var modalDiscard = modal.querySelector('.discard').addEventListener('click', function() {
+                register(new UserInfo('', ''));
                 document.querySelector('.modal-overlay').style.display = "none";
             });
-            var modalDiscard = modal.querySelector('.discard').addEventListener("click", function() {
-                var form = document.querySelector('form');
-                sendRequestToServer('GET', form.action + 'login', new RequestData("getId", null), function(e) {
-                    register(new UserInfo("Anonymous", "Anonymous#" + JSON.parse(e.target.responseText).messageContent.id));
-                    document.querySelector('.modal-overlay').style.display = "none";
-                });
-            });
         } else {
-            var form = document.querySelector("form");
-            form.elements[0].value = JSON.parse(localUser).currentMessage;
+            var currentMessage = localUser.currentMessage;
+            register(new UserInfo(localUser.userInfo.name, localUser.userInfo.email));
+            var localStorage = getLocalStorage();
+            setLocalStorage(localStorage.userInfo, currentMessage);
+            document.querySelector('.modal-overlay').style.display = "none";
+            form.elements[0].value = localUser.currentMessage;
         }
     }
 
-    function getMessages(number, callback) {
-
-    }
-
-    function postMessage(message, callback) {
-
-    }
-
-    function deleteMessage(id, callback) {
-
-    }
-
-    function getStats(callback) {
-        
-    }
-
-    function sendRequestToServer(method, action, data, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, action);
-        if (method.toUpperCase() === 'POST') {
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        }
-        xhr.addEventListener('load', function (e) {
-            if (xhr.status == "200") {
-                console.log('200!');
-                if (callback) {
-                    callback(e.target.responseText);
-                }
-            } else {
-                console.error('received the following status from server: ' + xhr.status);
-                console.log('received the following status from server: ' + xhr.status);
-            }
-        });
-        xhr.send(JSON.stringify(data));
-    }
-
-
-
-    function RequestData(type, content) {
-        this.messageType = type;
-        this.messageContent = content;
-    }
-
-    function saveLocalStorage(name, email, message) {
-        var user = {
-            currentMessage: message,
-            userInfo: {
-                name: name,
-                email: email
-            }
-        };
-        localStorage.setItem("babble", JSON.stringify(user));
-    }
-
-    function handleIncomingMessage(message) {
-        if (message.messageType === "deleteMessage") {
-            try {
-                var reqMessage = document.getElementById('message#' + message.messageContent.id);
-                reqMessage.parentNode.removeChild(reqMessage);
-            } catch (err) { }
-        } else {
-            for (i = 0; i < message.messageContent.messages.length; i++) {
-                var incoming = message.messageContent.messages[i];
-                addNewMessage(incoming.id, incoming.avatar, incoming.name, incoming.email, incoming.message);
-            }
-        }
-        document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = message.messageContent.messagesCount;
-        document.querySelector(".chat-info-counters-users").querySelector("span").textContent = message.messageContent.usersCount;
-    }
-
-    function sendUserSignedIn() {
-        var form = document.querySelector('form');
-        sendRequestToServer('GET', form.action + 'login', new RequestData("newLogIn", null), function(e) {
-            var message = JSON.parse(e);
-            document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = message.messageContent.messagesCount;
-            document.querySelector(".chat-info-counters-users").querySelector("span").textContent = message.messageContent.usersCount;
-        })
-    }
-
-    // Based on: link sent on slack and on https://alistapart.com/article/expanding-text-areas-made-elegant
-    function makeGrowable(container) {
-        if (container != null) {
-            var area = container.querySelector('textarea');
-            var clone = container.querySelector('span');
-            area.addEventListener('input', function(e) {
-                clone.textContent = area.textContent;
-                var user = JSON.parse(localStorage.getItem("babble"));
-                user.currentMessage = area.value;
-                saveLocalStorage(user.userInfo.name, user.userInfo.email, area.value);
-            });
-        }
-    }
-
-    function sendChatMessage(form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            var localUser = JSON.parse(localStorage.getItem("babble"));
-
-            if (!localUser.currentMessage) {
-                return;
-            }
-
-            var data = {
-                email: localUser.userInfo.email,
-                message: localUser.currentMessage
-            }
-
-            sendRequestToServer('POST', form.action + 'messages', new RequestData("newMessage", data), null);
-            form.elements[0].value = "";
-            localUser.currentMessage = "";
-            saveLocalStorage(localUser.userInfo.name, localUser.userInfo.email, '');
+    function register(userInfo) {
+        console.log('register called');
+        var form = document.querySelector("form");
+        setLocalStorage(userInfo, '');
+        sendRequestToServer('GET', form.action + 'login', null, function(e) {
+            console.log('register received: ' + e);
+            var userId = JSON.parse(e).id;
+            document.querySelector('.modal-overlay').style.display = "none";
         });
     }
 
-    function addNewMessage(id, avatar, name, email, message) {
+    function Message(name, email, message, timestamp) {
+        this.name = name;
+        this.email = email;
+        this.message = message;
+        this.timestamp = timestamp;
+    }
+
+    function getMessages(counter, callback) {
+        console.log('counter is: ' + counter)
+        form = document.querySelector('form');
+        sendRequestToServer('GET', form.action + 'messages?counter=' + counter, null, function(e) {
+            console.log('got message: ' + e);
+            callback(counter, JSON.parse(e));
+        });
+    }
+
+    function addMessages(counter, messagesList)  {
+        console.log('addMessages: counter=' + counter + ' messagelist length=' + messagesList.length);
+        for (i = 0; i < messagesList.length; i++) {
+            var message = messagesList[i];
+            console.log(JSON.stringify(message));
+            addNewMessage(message.id, message.avatar, message.name, message.email, message.message, message.timestamp);
+        }
+        getMessages(counter + messagesList.length, addMessages);
+    }
+
+    function addNewMessage(id, avatar, name, email, message, messageTime) {
+        var dateTime = new Date(messageTime);
+        var avatarUrl = avatar;
+
+        if (avatarUrl === '')
+            avatarUrl = '../images/anonymous.png'
+
         var ol = document.getElementById("messages-list");
         var li = document.createElement("li");
         var img = document.createElement("img");
@@ -180,12 +104,13 @@
         var p = document.createElement("p");
 
         img.setAttribute("class", "avatar");
-        img.setAttribute("src", avatar);//"https://yt3.ggpht.com/-MlnvEdpKY2w/AAAAAAAAAAI/AAAAAAAAAAA/tOyTWDyUvgQ/s900-c-k-no-mo-rj-c0xffffff/photo.jpg");
+        img.setAttribute("src", avatarUrl);
+        console.log('avatar: ' + avatar + ' but: ' + avatarUrl);
 
         cite.textContent = name;
 
-        time.textContent = "15:23"
-        time.setAttribute("datetime", "2017-5-25 15:23");
+        time.innerHTML = dateTime.getHours() + ':' + dateTime.getMinutes();
+        time.setAttribute("datetime", dateTime);
 
         header.setAttribute("class", "message-header");
         header.appendChild(cite);
@@ -234,14 +159,112 @@
         ol.appendChild(li);
     }
 
-    var poll = function(messageCounter, form) {
-        var data = {
-            counter: messageCounter
+    function postMessage(message, callback) {
+        form = document.querySelector('form');
+        sendRequestToServer('POST', form.action + 'messages', message, function(e) {
+            console.log('post received');
+        });
+    }
+
+    function deleteMessage(id, callback) {
+
+    }
+
+    function getStats(callback) {
+        form = document.querySelector('form');
+        sendRequestToServer('GET', form.action + 'stats', null, function(e) {
+            var replyObject = JSON.parse(e);
+            callback(replyObject.users, replyObject.messages);
+        });
+    }
+
+    function setStats(users, messages) {
+        document.querySelector('.users-counter').textContent = users;
+        document.querySelector('.messages-counter').textContent = messages;
+    }
+
+    function sendRequestToServer(method, action, data, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, action);
+        if (method.toUpperCase() === 'POST') {
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         }
-        sendRequestToServer('GET', form.action + 'messages?counter=' + (messageCounter + 1), new RequestData("getMessage", data), function(e) {
-            var message = JSON.parse(e.target.responseText);
-            handleIncomingMessage(message);
-            poll(message.messageContent.messagesCount, form);
+        xhr.addEventListener('load', function (e) {
+            if (xhr.status == "200") {
+                console.log('200');
+                if (callback) {
+                    callback(e.target.responseText);
+                }
+            } else {
+                console.error('received the following status from server: ' + xhr.status);
+                console.log('received the following status from server: ' + xhr.status);
+            }
+        });
+        xhr.send(JSON.stringify(data));
+    }
+
+    function getLocalStorage() {
+        return JSON.parse(localStorage.getItem("babble"));
+    }
+
+    function setLocalStorage(userInfo, message) {
+        var user = {
+            currentMessage: message,
+            userInfo: userInfo
+        };
+        localStorage.setItem("babble", JSON.stringify(user));
+    }
+
+    function handleIncomingMessage(message) {
+        if (message.messageType === "deleteMessage") {
+            try {
+                var reqMessage = document.getElementById('message#' + message.messageContent.id);
+                reqMessage.parentNode.removeChild(reqMessage);
+            } catch (err) { }
+        } else {
+            for (i = 0; i < message.messageContent.messages.length; i++) {
+                var incoming = message.messageContent.messages[i];
+                addNewMessage(incoming.id, incoming.avatar, incoming.name, incoming.email, incoming.message);
+            }
+        }
+        document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = message.messageContent.messagesCount;
+        document.querySelector(".chat-info-counters-users").querySelector("span").textContent = message.messageContent.usersCount;
+    }
+
+    // Based on: link sent on slack and on https://alistapart.com/article/expanding-text-areas-made-elegant
+    function makeGrowable(container) {
+    /*    if (container != null) {
+            var area = container.querySelector('textarea');
+            var clone = container.querySelector('span');
+            area.addEventListener('input', function(e) {
+                clone.textContent = area.textContent;
+                var user = JSON.parse(localStorage.getItem("babble"));
+                user.currentMessage = area.value;
+                setLocalStorage(user.userInfo, area.value);
+            });
+        }*/
+    }
+
+    function sendChatMessage(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var localUser = getLocalStorage();
+
+            /*if (!localUser.currentMessage) {
+                return;
+            }*/
+
+            var message = {
+                name: localUser.userInfo.name,
+                email: localUser.userInfo.email,
+                message: form.elements[0].value,
+                timestamp: Date.now()
+            }
+            
+            postMessage(message, addNewMessage);
+            form.elements[0].value = '';
+            setLocalStorage(localUser.userInfo, '');
         });
     }
 }(window.Babble));    
