@@ -256,14 +256,19 @@ section main .form-container {
 
 .growable textarea {
 	width: 100%;
-	resize: none;
+	height: 100%;
+    resize: none;
 	border: none;
-	
+	background: transparent;
 	position: absolute;
 	top: 0; left: 0;
-	height: 100%;
 	overflow: visible;
     outline: none;
+}
+
+.growable pre {
+    position: static;
+    background: green;
 }
 
 .modal-overlay {

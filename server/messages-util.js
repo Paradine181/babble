@@ -13,7 +13,10 @@
     return {
         getMessages: function(number) {
             var requiredMessages = []
-            for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
+            console.log('number=' + number + ' length=' + messages.length);
+            if (number < messages.length)
+                requiredMessages.push(messages[number].message);
+            /*for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
                 if (messages[i].id > lastRequestedId) {
                     requiredMessages.push({
                         name: messages[i].name,
@@ -24,24 +27,39 @@
                     });
                     lastRequestedId = messages[i].id;
                 }
-            }
+            }*/
+            return requiredMessages;
+        },
+        getMessagesId: function(number) {
+            var requiredMessages = []
+            if (number < messages.length)
+                requiredMessages.push(messages[number].id);
+            /*for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
+                if (messages[i].id > lastRequestedId) {
+                    requiredMessages.push({
+                        name: messages[i].name,
+                        email: messages[i].email,
+                        avatar: messages[i].avatar,
+                        message: messages[i].message,
+                        timestamp: messages[i].timestamp
+                    });
+                    lastRequestedId = messages[i].id;
+                }
+            }*/
             return requiredMessages;
         },
         addMessage: function(message) {
             messages.push({
                 id: ++messageId,
-                name: message.name,
-                email: message.email,
-                avatar: message.avatar,
-                message: message.message,
-                timestamp: message.timestamp
+                message: message
             });
             return messageId;
         },
         deleteMessage: function(id) {
             for (i = messages.length - 1; i >= 0; i--) {
-                if (messages[i].id === id) {
+                if (messages[i].id == id) {
                     messages.splice(i, 1);
+                    console.log('deleted');
                     return;
                 }
             }

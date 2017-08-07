@@ -76,6 +76,7 @@ http.createServer(function (request, response) {
                 switch (requestedUrl.href) {
                         case "/login": // usre logged in
                                 if (request.method === Babble.methods[0]) {
+                                        console.log('log in');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end(JSON.stringify({id: usersUtils.addUser()}));
                                 } else {
@@ -85,6 +86,7 @@ http.createServer(function (request, response) {
                                 break;
                         case "/logout": // user logged out
                                 if (request.method === Babble.methods[1]) {
+                                        console.log('log out');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         usersUtils.deleteUser();
                                         response.end();
@@ -95,9 +97,23 @@ http.createServer(function (request, response) {
                                 break;
                         case "/messages?counter=" + queryObject.counter: // get messages request
                                 if (request.method === Babble.methods[0]) {
+                                        console.log('get messages ' + queryObject.counter);    
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         if (messagesUtils.getMessagesCount() > queryObject.counter) {
-                                                response.end(JSON.stringify(messagesUtils.getMessages(queryObject.counter)));
+                                                var messages = messagesUtils.getMessages(queryObject.counter);
+                                                var ids = messagesUtils.getMessagesId(queryObject.counter);
+                                                var fullMessages = [];
+                                                for (var i = 0; i < messages.length; i++) {
+                                                        fullMessages.push({
+                                                                id: ids[i],
+                                                                name: messages[i].name,
+                                                                email: messages[i].email,
+                                                                avatar: messages[i].avatar,
+                                                                message: messages[i].message,
+                                                                timestamp: messages[i].timestamp
+                                                        });
+                                                }
+                                                response.end(JSON.stringify(fullMessages));
                                         } else {
                                                 Babble.messagesClients.push(new UserMessagesRequest(response, queryObject.counter));
                                         }
@@ -146,12 +162,25 @@ http.createServer(function (request, response) {
                                                                         timestamp: receivedMessage.timestamp
                                                                 });
 
-                                                                response.end(JSON.stringify({id: id}));
-
                                                                 while (Babble.messagesClients.length > 0) {
                                                                         var client = Babble.messagesClients.pop();
-                                                                        client.response.end(JSON.stringify(messagesUtils.getMessages(client.counter)));
+                                                                        var messages = messagesUtils.getMessages(client.counter);
+                                                                        var ids = messagesUtils.getMessagesId(client.counter);
+                                                                        var fullMessages = [];
+                                                                        for (var i = 0; i < messages.length; i++) {
+                                                                                fullMessages.push({
+                                                                                        id: ids[i],
+                                                                                        name: messages[i].name,
+                                                                                        email: messages[i].email,
+                                                                                        avatar: messages[i].avatar,
+                                                                                        message: messages[i].message,
+                                                                                        timestamp: messages[i].timestamp
+                                                                                });
+                                                                        }
+                                                                        client.response.end(JSON.stringify(fullMessages));
                                                                 }
+
+                                                                response.end(JSON.stringify({id: id}));
                                                         });
                                                 });
                                         });
@@ -162,8 +191,16 @@ http.createServer(function (request, response) {
                                 break;
                         case "/messages" + messageId: // delete a message
                                 if (request.method === Babble.methods[2]) {
-                                        console.log('delete message');
+                                        messageId = messageId.substring(1);
+                                        console.log('delete message ' + messageId);
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+
+                                        messagesUtils.deleteMessage(messageId);
+
+                                        while (Babble.messagesClients.length > 0) {
+                                                var client = Babble.messagesClients.pop();
+                                                client.response.end(JSON.stringify([{id: messageId}]));
+                                        }
                                         response.end();
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });

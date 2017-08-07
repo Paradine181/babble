@@ -18,7 +18,8 @@
             return ++userId;
         },
         deleteUser: function() {
-            --users;
+            if (users > 0)
+                --users;
         }
     };
 }));   
