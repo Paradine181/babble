@@ -78,6 +78,12 @@ http.createServer(function (request, response) {
                                 if (request.method === Babble.methods[0]) {
                                         console.log('log in');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+
+                                        while (Babble.messagesClients.length > 0) {
+                                                var client = Babble.messagesClients.pop();
+                                                client.response.end(JSON.stringify([ ]));
+                                        }
+
                                         response.end(JSON.stringify({id: usersUtils.addUser()}));
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -89,6 +95,12 @@ http.createServer(function (request, response) {
                                         console.log('log out');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         usersUtils.deleteUser();
+
+                                        while (Babble.messagesClients.length > 0) {
+                                                var client = Babble.messagesClients.pop();
+                                                client.response.end(JSON.stringify([ ]));
+                                        }
+
                                         response.end();
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -221,133 +233,6 @@ http.createServer(function (request, response) {
                                 response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
                                 response.end();
                 }
-        }
-
-        return;
-
-        if (request.method === 'POST') {
-                var requestBody = '';
-                request.on('data', function (chunk) {
-                        requestBody += chunk.toString();
-                });
-                request.on('end', function () {
-                        var data = JSON.parse(requestBody);
-                        switch (data.messageType) {
-                                case "getId":
-                                        console.log('getId');
-                                        ++Babble.anonymousId;
-                                        var responseData = {
-                                                id: Babble.anonymousId,
-                                                usersCount: Babble.users,
-                                                messagesCount: Babble.messages.length
-                                        };
-                                        response.end(JSON.stringify(new Message("registration", responseData)));
-                                        break;
-                                case "newLogIn":
-                                        console.log('newLogIn');
-                                        ++Babble.users;
-                                        var allUsersResponseData = {
-                                                usersCount: Babble.users
-                                        };
-                                        var responseData = {
-                                                usersCount: Babble.users,
-                                                messagesCount: Babble.messages.length
-                                        };
-                                        messageEachUser();
-                                        response.end(JSON.stringify(new Message("updateCounters", responseData)));
-                                        break;
-                                case "newSignOut":
-                                        console.log('newSignOut');
-                                        if (Babble.users > 0) {
-                                                --Babble.users;
-                                                var allUsersResponseData = {
-                                                        usersCount: Babble.users
-                                                };
-                                                messageEachUser();
-                                        }
-                                        response.end();
-                                        break;
-                                case "getMessage":
-                                        console.log('getMessage');
-                                        if (Babble.messages.length > data.messageContent.counter) {
-                                                var responseData = {
-                                                        usersCount: Babble.users,
-                                                        messagesCount: Babble.messages.length,
-                                                        messages: Babble.messages.slice(data.messageContent.counter)
-                                                }
-                                                response.end(JSON.stringify(new Message("newMessages", responseData)));
-                                        } else {
-                                                Babble.clients.push(new UserClient(response, data.messageContent.counter));
-                                        }
-                                        break;
-                                case "newMessage":
-                                        console.log('newMessage');
-                                        console.log(JSON.stringify(data));
-                                        var encoding = MD5(data.messageContent.email);
-
-                                        var options = {
-                                                host: 'en.gravatar.com',
-                                                path: '/' + encoding + '.json',
-                                                headers: {
-                                                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-``                                                }
-                                        }
-
-                                        https.get(options, function (res) {
-                                                var body = '';
-                                                res.on('data', function (chunk) {
-                                                        body += chunk;
-                                                });
-                                                res.on('end', function () {
-                                                        var avatarUrl = '';
-                                                        var userName = '';
-                                                        try {
-                                                                var json = JSON.parse(body);
-                                                                avatarUrl = json.entry[0].thumbnailUrl;
-                                                                if (json.entry[0].displayName) {
-                                                                        userName = json.entry[0].displayName;
-                                                                } else if (json.entry[0].preferredUsername) {
-                                                                        userName = json.entry[0].preferredUsername;
-                                                                }
-                                                        } catch (err) {
-                                                                avatarUrl = 'http://www.gravatar.com/avatar/' + encoding + '?d=identicon';
-                                                                userName = data.messageContent.email;
-                                                        }
-
-                                                        Babble.messages.push({
-                                                                id: ++(Babble.messageId),
-                                                                counter: Babble.messages.length + 1,
-                                                                email: data.messageContent.email,
-                                                                avatar: avatarUrl,
-                                                                name: userName,
-                                                                message: data.messageContent.message
-                                                        });
-                                                        messageEachUser();
-                                                        response.end();
-                                                });
-                                        })
-                                        break;
-                                case "deleteMessage":
-                                        console.log('deleteMessage');
-                                        var data = {
-                                                usersCount: Babble.users,
-                                                messagesCount: Babble.messages.length,
-                                                id: data.messageContent.id
-                                        };
-                                        for (i = Babble.messages.length - 1; i >= 0; i--) {
-                                                if (Babble.messages[i].id === data.id) {
-                                                        Babble.messages.splice(i, 1);
-                                                        data.messagesCount = Babble.messages.length;
-                                                        break;
-                                                }
-                                        }
-                                        messageAllUsers(new Message("deleteMessage", data))
-                                        response.end();
-                                        break;
-                                default:
-                                        response.end();
-                        }
-                });
         }
 }).listen(9000, 'localhost');
 

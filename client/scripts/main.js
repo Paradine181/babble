@@ -1,20 +1,27 @@
 (function () {
 
-     window.addEventListener("load", function() {
+    /**
+     * Actions to be done when the page loads
+     */
+     window.addEventListener('load', function() {
         var form = document.querySelector('form');
-        document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = 0;
+        document.querySelector('.chat-info-counters-messages').querySelector('span').textContent = 0;
+
         logIn();
         getStats(setStats);
-        getMessages(0, addMessages);
+        getMessages(0, handleMessages);
 
         makeGrowable(document.querySelector('.js-growable'));
 
         sendChatMessage(form);
     });
 
+    /**
+     * Actions to be done before page is unloaded
+     */
     window.addEventListener('beforeunload', function() {
         var form = document.querySelector('form');
-        navigator.sendBeacon(form.action + 'logout');
+        navigator.sendBeacon(form.action + 'logout'); // send logout message to server (so that it can update the users counter)
     });
 
     // Based on: link sent on slack and on https://alistapart.com/article/expanding-text-areas-made-elegant
@@ -26,6 +33,9 @@
                 clone.textContent = area.textContent;
                 setLocalStorage(getLocalStorage().userInfo, area.value);
             });
+            
+            // Enable extra CSS
+            container.className += "active";
         }
     }
 
@@ -91,9 +101,12 @@
     function register(userInfo) {
         var form = document.querySelector("form");
         setLocalStorage(userInfo, '');
-        sendRequestToServer('GET', form.action + 'login', null, function(e) {
-            var userId = JSON.parse(e).id;
+        sendRequestToServer('GET', form.action + 'login', null,
+        function(e) {
+            var userId = e.id;
             document.querySelector('.modal-overlay').style.display = "none";
+        }, function() {
+            register(userInfo);
         });
     }
 
@@ -118,12 +131,20 @@
      */
     function getMessages(counter, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('GET', form.action + 'messages?counter=' + counter, null, function(e) {
-            callback(counter, JSON.parse(e));
+        sendRequestToServer('GET', form.action + 'messages?counter=' + counter, null,
+        function(e) {
+            callback(counter, e);
+        }, function() {
+            getMessages(counter, callback);
         });
     }
 
-    function addMessages(counter, messagesList)  {
+    /**
+     * This method is in charge of handling new messages received from server
+     * @param {Number} counter - the previous number of messages
+     * @param {Array} messagesList - the received message list
+     */
+    function handleMessages(counter, messagesList)  {
         var addedMessages = 0;
         for (i = 0; i < messagesList.length; i++) {
             var message = messagesList[i];
@@ -136,7 +157,8 @@
                 addedMessages--;
             }
         }
-        getMessages(Math.max(counter + addedMessages, 0), addMessages);
+        getStats(setStats);
+        getMessages(Math.max(counter + addedMessages, 0), handleMessages);
     }
 
     function addNewMessage(id, avatar, name, email, message, messageTime) {
@@ -207,9 +229,7 @@
         });
 
         del.addEventListener("click", function() {
-            deleteMessage(id, function(e) {
-                console.log('i was here');
-            });
+            deleteMessage(id, function(e) { });
         });
 
         div.addEventListener("focusin", function() {
@@ -229,21 +249,28 @@
 
     function postMessage(message, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('POST', form.action + 'messages', message, function(e) {
-            addDeleteMessage(JSON.parse(e).id);
+        sendRequestToServer('POST', form.action + 'messages', message,
+        function(e) {
+            addDeleteMessage(e.id);
+        }, function() {
+            postMessage(message, callback);
         });
     }
 
     function deleteMessage(id, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('DELETE', form.action + 'messages/' + id, null, callback);
+        sendRequestToServer('DELETE', form.action + 'messages/' + id, null, callback, function() {
+            deleteMessage(id, callback)
+        });
     }
 
     function getStats(callback) {
         form = document.querySelector('form');
-        sendRequestToServer('GET', form.action + 'stats', null, function(e) {
-            var replyObject = JSON.parse(e);
-            callback(replyObject.users, replyObject.messages);
+        sendRequestToServer('GET', form.action + 'stats', null,
+        function(e) {
+            callback(e.users, e.messages);
+        }, function() {
+            getStats(callback);
         });
     }
 
@@ -252,39 +279,35 @@
         document.querySelector('.messages-counter').textContent = messages;
     }
 
-    function sendRequestToServer(method, action, data, callback) {
+    /**
+     * This method is in charge of sending a request to the server and initial handle of its response
+     * @param {String} method - the method to be used to send to the server
+     * @param {String} action - the action of the request (request's destination)
+     * @param {Object} data - the data to be sent
+     * @param {Function} callback - callback function to be called upon receiving the response
+     */
+    function sendRequestToServer(method, action, data, callback, errorCallback) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, action);
         if (method.toUpperCase() === 'POST') {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         }
         xhr.addEventListener('load', function (e) {
-            if (xhr.status == "200") {
+            if (xhr.status == 200) {
                 if (callback) {
-                    callback(e.target.responseText);
+                    callback(JSON.parse(e.target.responseText));
                 }
             } else {
                 console.error('received the following status from server: ' + xhr.status);
                 console.log('received the following status from server: ' + xhr.status);
             }
         });
-        xhr.send(JSON.stringify(data));
-    }
-
-    function handleIncomingMessage(message) {
-        if (message.messageType === "deleteMessage") {
-            try {
-                var reqMessage = document.getElementById('message#' + message.messageContent.id);
-                reqMessage.parentNode.removeChild(reqMessage);
-            } catch (err) { }
-        } else {
-            for (i = 0; i < message.messageContent.messages.length; i++) {
-                var incoming = message.messageContent.messages[i];
-                addNewMessage(incoming.id, incoming.avatar, incoming.name, incoming.email, incoming.message);
+        xhr.addEventListener('error', function (e) {
+            if (errorCallback) {
+                errorCallback();
             }
-        }
-        document.querySelector(".chat-info-counters-messages").querySelector("span").textContent = message.messageContent.messagesCount;
-        document.querySelector(".chat-info-counters-users").querySelector("span").textContent = message.messageContent.usersCount;
+        });
+        xhr.send(JSON.stringify(data));
     }
 
     function sendChatMessage(form) {
@@ -292,11 +315,6 @@
             e.preventDefault();
 
             var localUser = getLocalStorage();
-
-            /*if (!localUser.currentMessage) {
-                return;
-            }*/
-
             var message = {
                 name: localUser.userInfo.name,
                 email: localUser.userInfo.email,

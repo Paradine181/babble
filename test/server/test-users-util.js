@@ -19,8 +19,9 @@ describe('User', function() {
         let usersCount = users.addUser();
         assert.deepEqual(2,usersCount);
     });
-    it ('should have one user looged in, after user signed out', function() {
-        let usersCount = users.deleteUser();
+    it ('should have one user logged in, after user signed out', function() {
+        users.deleteUser();
+        let usersCount = users.getUsers();
         assert.deepEqual(1,usersCount);
     });
 });
