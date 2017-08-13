@@ -20,26 +20,24 @@
             <nav> </nav>
             
             <main>
-                <div class="chat-room">
-                    <header class="chat-info">
-                        <h2 aria-label="Vegans Chat Room">Vegans</h2>
+                <header class="chat-info">
+                    <h2 aria-label="Vegans Chat Room">Vegans</h2>
 
-                        <dl class="chat-info-counters">
-                            <dt><span aria-label="Number of Messages in Channel"></span></dt>
-                            <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span class="messages-counter"></span></dd>
-                            <dt><span aria-label="Number of Users in Channel"></span></dt>
-                            <dd class="chat-info-counters-users"><img src="images/users.png" /><span class="users-counter"></span></dd>
-                        </dl>
-                    </header>
+                    <dl class="chat-info-counters">
+                        <dt><span aria-label="Number of Messages in Channel"></span></dt>
+                        <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span class="messages-counter"></span></dd>
+                        <dt><span aria-label="Number of Users in Channel"></span></dt>
+                        <dd class="chat-info-counters-users"><img src="images/users.png" /><span class="users-counter"></span></dd>
+                    </dl>
+                </header>
 
-                    <ol aria-label="Chat Messages" class="messages-list" id="messages-list"> </ol>
-                </div>
+                <ol aria-label="Chat Messages" class="messages-list" id="messages-list"> </ol>
 
                 <footer class="form-container">
-                    <form method="POST" action="http:\\localhost:9000">
-                        <div aria-label="Write New Message" class="growable js-growable">
+                    <form method="POST" action="http:\\localhost:9000" class="js-growable">
+                        <div class="expanding-textarea">
                             <pre><span></span><br></pre>
-                            <textarea name="message-content"></textarea>
+                            <textarea name="message-content" placeholder="Type a message" ></textarea>
                         </div>
                         <input aria-label="Send New Message" class="submit-button" type="image" src="images/send.png" />
                     </form>

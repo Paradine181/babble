@@ -50,26 +50,15 @@ section {
     align-items: stretch;
 }
 
-section nav,
-section main {
-    height: 100%;
-}
-
 section nav {
     background-color: #61D290;
+    height: 100%;
     flex: 0 0 11.5em;
 }
 
 section main {
     background-color: #F6F6F6;
-    flex: 1 1 auto;
-
-    display: flex;
-    flex-direction: column;
-}
-
-section main .chat-room {
-    padding: 0;
+    height: 100%;
     flex: 1 1 auto;
 
     display: flex;
@@ -77,54 +66,17 @@ section main .chat-room {
     align-items: stretch;
 }
 
-section main .form-container {
-    flex: 1 1 content;
-    /*max-height: 300px;*/
-    width: 100%;
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: normal;
-}
-
-.chat-room .chat-info {
+section main .chat-info {
     flex: 0 0 auto;
-    padding: 0 3em 0 1.5em;
+    padding: 0 1.5em 0 1.5em;
     
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.chat-room .chat-info h2 {
-    display: inline;
-    margin: 0.6em 0;
-    padding: 0;
-
-    font-family: 'Nunito', sans-serif;
-    font-size: 14pt;
-    font-weight: normal;
-}
-
-.chat-room .chat-info dl,
-.chat-room .chat-info dt,
-.chat-room .chat-info dd,
-.chat-room .chat-info dd img,
-.chat-room .chat-info dd span {
-    display: inline;
-    margin: auto 0;
-    vertical-align: middle;
-
-    font-family: 'Nunito', sans-serif;
-    font-size: 9pt;
-    font-weight: bold;
-}
-
-.chat-room .chat-info dt span {
-    margin: auto 0;
-    display: none;
-}
-
-.chat-room .messages-list {
+section main .messages-list {
+    flex: 1 1 auto;
     height: 0;
     margin: 0;
     padding: 0;
@@ -135,11 +87,48 @@ section main .form-container {
     word-wrap: break-word;
 }
 
-.chat-room .messages-list .message {
+section main .form-container {
+    flex: 1 1 content;
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.chat-info h2 {
+    display: inline;
+    margin: 0.6em 0;
+    padding: 0;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+}
+
+.chat-info dl,
+.chat-info dt,
+.chat-info dd,
+.chat-info dd img,
+.chat-info dd span {
+    display: inline;
+    margin: auto 0;
+    vertical-align: middle;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+}
+
+.chat-info dt span {
+    margin: auto 0;
+    display: none;
+}
+
+.messages-list .message {
     padding: 0 1em 0.5em 1.2em;
 }
 
-.chat-room .messages-list .message .avatar {
+.messages-list .message .avatar {
     height: 1.8em;
     width: 1.8em;
     border: 0 solid transparent;
@@ -147,7 +136,7 @@ section main .form-container {
     vertical-align: top;
 }
 
-.chat-room .messages-list .message .message-body {
+.messages-list .message .message-body {
     display: inline-block;
     background-color: #ffffff;
     border: 1px solid #DFDFDF;
@@ -158,8 +147,8 @@ section main .form-container {
     vertical-align: top;
 }
 
-.chat-room .messages-list .message .message-body:hover,
-.chat-room .messages-list .message .message-body:focus {
+.messages-list .message .message-body:hover,
+.messages-list .message .message-body:focus {
     background-color: #EBEDEC;
     border: 1px solid #D8D8D8;
     outline: none;
@@ -217,63 +206,59 @@ section main .form-container {
 }
 
 @media screen and (min-width: 639px) {
-    nav { display: blocinlink; }   /* hide it elsewhere */
+    nav { display: inline-block; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
 }
 
 .form-container form {
-    background-color: #FFFFFF;
-    border: 1px solid #D7D7D7;
-    padding: 1em 2em 1em 1em;
-
     display: flex;
     flex-direction: row;
+    max-height: 300px;
+    border: 1px solid #D7D7D7;
+    padding: 1em 2em 1em 1em;
 }
 
-.form-container form .submit-button {
-    height: 3em;
-    width: auto;
+.expanding-textarea {
+    flex: 1;
+    position: relative;
 }
 
-.growable {
-    flex: 1 1 auto;
-    display: flex;
-	position: relative;
-	max-height: 300px;
-	overflow: hidden;
-    margin-right: 1em;
+.expanding-textarea textarea,
+.expanding-textarea pre {
+    box-sizing: border-box;
+    background: transparent;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.expanding-textarea textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    resize: none;
+    overflow: auto;
+    outline: none;
+}
+
+.expanding-textarea pre {
+    display: block;
+    visibility: hidden;
+}
+
+.expanding-textarea pre span {
     width: 100%;
 }
 
-.growable textarea, .growable pre {
-    flex: 1 1 auto;
-	margin: 0;
-    padding: 0;
-    outline: 0;
-    border: 0;
-/*
-    word-wrap: break-word;
-	box-sizing: border-box;
-	font-family: inherit;
-	font-size: inherit;
-	white-space: pre-wrap;
-	word-wrap: break-word;*/
-}
-
-.growable textarea {
-	position: absolute;
-	top: 0; left: 0;
-	width: 100%;
-	height: 100%;
-    resize: none;
-	background: transparent;
-	overflow: hidden;
-}
-
-.growable pre {
-    flex:1;
-    position: static;
-    background: green;
+.form-container form .submit-button {
+    flex: 0 0 content;
+    height: 3em;
+    width: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 1em;
 }
 
 .modal-overlay {
@@ -322,7 +307,7 @@ section main .form-container {
 }
 
 .modal form {
-	padding: 20px;
+    padding: 20px;
     font-size: inherit;
     font-family: inherit;
 }

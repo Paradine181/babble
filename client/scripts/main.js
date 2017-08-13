@@ -11,7 +11,7 @@
         getStats(setStats);
         getMessages(0, handleMessages);
 
-        makeGrowable(document.querySelector('.js-growable'));
+        makeGrowable(document.querySelector('.expanding-textarea'));
 
         sendChatMessage(form);
     });
@@ -30,12 +30,9 @@
             var area = container.querySelector('textarea');
             var clone = container.querySelector('span');
             area.addEventListener('input', function(e) {
-                clone.textContent = area.textContent;
+                clone.textContent = area.value;
                 setLocalStorage(getLocalStorage().userInfo, area.value);
             });
-            
-            // Enable extra CSS
-            container.className += "active";
         }
     }
 
