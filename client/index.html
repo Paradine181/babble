@@ -7,13 +7,12 @@
 
         <link rel="stylesheet" href="styles/main.css">
 
-        <script type="text/javascript" src="scripts/main.js"></script>
+        <script async type="text/javascript" src="scripts/main.js"></script>
 	</head>
 
 	<body>
 		<header>
-            <img src="images/logo.png" aria-label="Babble - Talk freely" alt="Babble - Talk freely" />
-            <h1 aria-label="Babble - Talk freely">Babble - Talk freely</h1>
+            <img src="images/logo.gif" aria-label="Babble - Talk freely" alt="Babble - Talk freely" />
 		</header>
 
         <section>
@@ -40,9 +39,9 @@
                     <form method="POST" action="http://localhost:9000" class="js-growable">
                         <div class="expanding-textarea">
                             <pre><span></span><br></pre>
-                            <textarea name="message-content" placeholder="Type a message" ></textarea>
+                            <textarea name="message-content" placeholder="Type a message" aria-label="New Message Content" ></textarea>
                         </div>
-                        <input alt="Sendd New Message" aria-label="Send New Message" class="submit-button" type="image" src="images/send.png" />
+                        <input alt="Sendd New Message" aria-label="Send New Message" class="submit-button" type="image" src="images/send.gif" />
                     </form>
                 </footer>
             </main>
