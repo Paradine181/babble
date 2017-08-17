@@ -12,34 +12,37 @@
 
 	<body>
 		<header>
-            <img src="images/logo.png" />
+            <img src="images/logo.png" aria-label="Babble - Talk freely" alt="Babble - Talk freely" />
             <h1 aria-label="Babble - Talk freely">Babble - Talk freely</h1>
 		</header>
 
         <section>
-            <nav> </nav>
+            <h1>Vegans</h1>
+            <nav>
+                <h2>Chat Rooms</h2>
+            </nav>
             
             <main>
                 <header class="chat-info">
-                    <h2 aria-label="Vegans Chat Room">Vegans</h2>
+                    <h1 aria-label="Vegans">Vegans</h1>
 
                     <dl class="chat-info-counters">
                         <dt><span aria-label="Number of Messages in Channel"></span></dt>
-                        <dd class="chat-info-counters-messages"><img src="images/messages.png" /><span class="messages-counter"></span></dd>
+                        <dd class="chat-info-counters-messages"><img alt="users count" src="images/messages.png" /><span class="messages-counter"></span></dd>
                         <dt><span aria-label="Number of Users in Channel"></span></dt>
-                        <dd class="chat-info-counters-users"><img src="images/users.png" /><span class="users-counter"></span></dd>
+                        <dd class="chat-info-counters-users"><img alt="messages count" src="images/users.png" /><span class="users-counter"></span></dd>
                     </dl>
                 </header>
 
                 <ol aria-label="Chat Messages" class="messages-list" id="messages-list"> </ol>
 
                 <footer class="form-container">
-                    <form method="POST" action="http:\\localhost:9000" class="js-growable">
+                    <form method="POST" action="http://localhost:9000" class="js-growable">
                         <div class="expanding-textarea">
                             <pre><span></span><br></pre>
                             <textarea name="message-content" placeholder="Type a message" ></textarea>
                         </div>
-                        <input aria-label="Send New Message" class="submit-button" type="image" src="images/send.png" />
+                        <input alt="Sendd New Message" aria-label="Send New Message" class="submit-button" type="image" src="images/send.png" />
                     </form>
                 </footer>
             </main>
@@ -50,11 +53,11 @@
         <div class="modal-overlay">
             <div class="modal" id="registration-form">
                 <h2 aria-label="Registration Form">Who are you?</h2>
-                <form action="">
-                <label for="name">Full name:</label>
-                <input type="text" id="name" aria-label="Full Name" />
-                <label for="email">Email:</label>
-                <input type="email" id="email" aria-label="Email Address" />
+                <form action="#">
+                    <label for="name">Full name:</label>
+                    <input type="text" id="name" aria-label="Full Name" />
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" aria-label="Email Address" />
                     <div class="form-controls">
                         <button class="confirm" aria-label="Save Details">Save</button>
                         <button class="discard" aria-label="Stay Anonymous">Stay Anonymous</button>

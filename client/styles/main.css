@@ -13,96 +13,119 @@ body {
     flex-direction: column;
     align-items: stretch;
     word-wrap: break-word;
+    
+    font-family: 'Nunito', sans-serif;
+}
+
+body * {
+    font-family: inherit;
+}
+
+img {
+    max-width: 100%;
+    
+    object-fit: scale-down;
 }
 
 body > header {
     background-color: #353744;
-    flex: 0 0 auto;
-    margin: 0;
-    height: 5em;
-    padding: 0 1em;
 
+    margin: 0;
+    padding: 0 1em;
+    height: 5em;
+
+    flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-img {
-    max-width: 100%;
-}
-
-body > header h1 {
-    display: none;
-}
-
 body > header img {
-    object-fit: scale-down;
-    height: 3.5em;
     width: auto;
+    height: 3.5em;
+
     flex: 0 0 auto;
 }
 
-section {
-    flex: 1;
+body > header h1 {
+    display: hidden;
+}
 
+section {
+    flex: 1 1 100%;
     display: flex;
     flex-direction: row;
     align-items: stretch;
 }
 
+section > h1 {
+    display: none;
+}
+
 section nav {
     background-color: #61D290;
+
     height: 100%;
+
     flex: 0 0 11.5em;
+}
+
+section nav > h2 {
+    display: none;
 }
 
 section main {
     background-color: #F6F6F6;
-    height: 100%;
-    flex: 1 1 auto;
 
+    height: 100%;
+    
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 
 section main .chat-info {
-    flex: 0 0 auto;
     padding: 0 1.5em 0 1.5em;
-    
+
+    flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
 section main .messages-list {
-    flex: 1 1 auto;
-    height: 0;
-    margin: 0;
     padding: 0;
+    min-height: 20px;
+
     flex: 1 1 auto;
     list-style-type: none;
     overflow-x: hidden;
     overflow-y: auto;
     word-wrap: break-word;
+    white-space: nowrap;
 }
 
 section main .form-container {
-    flex: 1 1 content;
     width: 100%;
-    font-family: 'Nunito', sans-serif;
+    
+    flex: 1 1 content;
+    
     font-size: 9pt;
     font-weight: normal;
 }
 
-.chat-info h2 {
-    display: inline;
+.chat-info h1 {
     margin: 0.6em 0;
     padding: 0;
 
-    font-family: 'Nunito', sans-serif;
+    display: inline;
+    
+    color: #292929;
     font-size: 14pt;
     font-weight: normal;
+    
+    object-fit: scale-down;
 }
 
 .chat-info dl,
@@ -110,17 +133,20 @@ section main .form-container {
 .chat-info dd,
 .chat-info dd img,
 .chat-info dd span {
-    display: inline;
     margin: auto 0;
+    
+    display: inline;
     vertical-align: middle;
 
-    font-family: 'Nunito', sans-serif;
+    color: #353744;
     font-size: 9pt;
     font-weight: bold;
+    word-wrap: break-word;
 }
 
 .chat-info dt span {
     margin: auto 0;
+    
     display: none;
 }
 
@@ -129,68 +155,77 @@ section main .form-container {
 }
 
 .messages-list .message .avatar {
-    height: 1.8em;
-    width: 1.8em;
     border: 0 solid transparent;
     border-radius: 50%;
+    width: 1.8em;
+    height: 1.8em;
+    
     vertical-align: top;
 }
 
 .messages-list .message .message-body {
-    display: inline-block;
     background-color: #ffffff;
+    
+    margin-left: 8px;
     border: 1px solid #DFDFDF;
     border-radius: 10px;
-    max-width: 600px;
-    margin-left: 8px;
     padding: 0.2em 0.4em 0.2em 0.4em;
+    max-width: 600px;
+    
+    display: inline-block;
     vertical-align: top;
+    white-space: pre-wrap;
 }
 
 .messages-list .message .message-body:hover,
 .messages-list .message .message-body:focus {
     background-color: #EBEDEC;
+
     border: 1px solid #D8D8D8;
     outline: none;
 }
 
 .message-body header {
     width: 100%;
+
     display: flex;
     flex-direction: row;
 }
 
 .message-body cite {
-    font-family: 'Nunito', sans-serif;
+    margin: auto 0;
+
     font-size: 0.75em;
     font-weight: bold;
     font-style: normal;
-    margin: auto 0;
 }
 
 .message-body time {
+    margin: auto 0.7em;
+
     flex: 1;
-    font-family: 'Nunito', sans-serif;
+
     font-size: 0.7em;
     font-weight: normal;
-    margin: auto 0.7em;
 }
 
 .message-body button {
     background: url(../images/delete.png);
     background-repeat: no-repeat;
-    padding: 0;
+
     margin: auto 0 auto 0;
     border: none;
-    height: 0.75em;
+    padding: 0;
     width: 0.75em;
+    height: 0.75em;
+
     display: none;
     vertical-align: middle;
 }
 
 .message-body p {
     margin: 0;
-    font-family: 'Nunito', sans-serif;
+
     font-size: 0.75em;
     font-weight: normal;
 }
@@ -198,27 +233,83 @@ section main .form-container {
 @media screen and (min-width: 0) and (max-width: 320px) {
     nav { display: none; }
     main { flex: 1 1 auto; }
+    section main .chat-info { flex-wrap: wrap; }
+    section main .chat-info h1 { word-break: break-all; }
+    section main .messages-list { margin: 0 3px 0 0; }
+    section main .messages-list .message {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    .message-body header { flex-wrap: wrap; }
+    .form-container {
+        background-color: #F6F6F6;
+
+        border: 0;
+    }
+    .form-container form { flex-wrap: wrap; }
+    .expanding-textarea textarea {
+        border: 1px solid #D7D7D7;
+        border-radius: 0.7em;
+    }
 }
 
 @media screen and (min-width: 321px) and (max-width: 638px) {
     nav { display: none; }  /* show it on small screens */
     main { flex: 1 1 auto; }
+    section main .chat-info { flex-wrap: wrap; }
+    section main .chat-info h1 { word-break: normal; }
+    section main .messages-list { margin: 0 3px 0 0; }
+    section main .messages-list .message {
+        white-space: nowrap;
+        word-break: normal;
+    }
+    .message-body header { flex-wrap: wrap; }
+    .form-container {
+        background-color: #F6F6F6;
+
+        border: 0;
+    }
+    .form-container form { 
+        flex-wrap: wrap;
+        /*white-space: pre-wrap*/
+    }
+    .expanding-textarea textarea {
+        border: 1px solid #D7D7D7;
+        border-radius: 0.7em;
+    }
 }
 
 @media screen and (min-width: 639px) {
     nav { display: inline-block; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
+    section main .chat-info { flex-wrap: nowrap; }
+    section main .chat-info h1 { word-break: normal; }
+    section main .messages-list { margin: 0 10px 0 0; }
+    section main .messages-list .message {
+        white-space: nowrap;
+        word-break: normal;
+    }
+    .message-body header { flex-wrap: nowrap; }
+    .form-container {
+        background-color: #FFFFFF;
+
+        border: 1px solid #D7D7D7;
+    }
+    .form-container form { flex-wrap: nowrap; }
+    .expanding-textarea textarea { border: 0 }
 }
 
 .form-container form {
+    padding: 1em 2em 1em 1em;
+    max-height: 300px;
+
     display: flex;
     flex-direction: row;
-    max-height: 300px;
-    border: 1px solid #D7D7D7;
-    padding: 1em 2em 1em 1em;
 }
 
 .expanding-textarea {
+    min-width: 1em;
+
     flex: 1;
     position: relative;
 }
@@ -232,12 +323,14 @@ section main .form-container {
 }
 
 .expanding-textarea textarea {
+    background-color: #FFFFFF;
+
+    width: 100%;
+    height: 100%;
+
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
     resize: none;
     overflow: auto;
     outline: none;
@@ -253,41 +346,46 @@ section main .form-container {
 }
 
 .form-container form .submit-button {
-    flex: 0 0 content;
-    height: 3em;
-    width: auto;
+    object-fit: scale-down;
+
     margin-top: auto;
     margin-bottom: auto;
-    padding-left: 1em;
+    margin-left: 1em;
+    width: auto;
+    height: 3em;
+    
+    flex: 0 1 content;
 }
 
 .modal-overlay {
 	background-color: rgba(0, 0, 0, 0.7);
-	position: fixed;
-	width: 100%;
+    width: 100%;
 	height: 100%;
+	
+    position: fixed;
 	top: 0;
 	left: 0;
     z-index: 2;
 }
 
 .modal {
-    display: inline-block;
+    background-color: #F6F6F6;
+    box-shadow: 0 0 15px 0 #000000;
+
+    margin: auto;
 	border: 1px solid black;
+    max-width: 600px;
+	width: auto;
+	max-height: 300px;
+	height: auto;
+    
+    display: inline-block;
 	position: fixed;	
 	top: 0;
 	left: 0;	
 	right: 0;
 	bottom: 0;
-    height: auto;
-    width: auto;
-	max-width: 600px;
-	max-height: 300px;
-	margin: auto;
-	background-color: #F6F6F6;
-	box-shadow: 0 0 15px 0 #000000;
-
-    font-family: 'Nunito', sans-serif;
+    
     font-size: 9pt;
     font-weight: normal;
 }
@@ -301,27 +399,31 @@ section main .form-container {
 }
 
 .modal h2 {
+    color: #FFFFFF;
+
     font-family: inherit;
     font-size: 14pt;
-    color: #FFFFFF;
 }
 
 .modal form {
     padding: 20px;
+
     font-size: inherit;
     font-family: inherit;
 }
 
 .modal button {
+    color: #000000;
+
     margin: 10px;
-    padding: 10px;
-    text-align: center;
     border: none;
     border-radius: 4px;
+    padding: 10px;
+    
+    text-align: center;
     font-family: inherit;
     font-size: inherit;
     font-weight: bold;
-    color: #000000;
 }
 
 .confirm {
@@ -335,8 +437,9 @@ section main .form-container {
 .modal form input[type=text],
 .modal form input[type=email],
 .modal form .form-controls {
-    display: inline-block;
     width: 100%;
+
+    display: inline-block;
 }
 
 .modal form .form-controls {
@@ -345,4 +448,25 @@ section main .form-container {
 
 .modal form button {
     display: inline-block;
+}
+
+/* Scroll Bar Style */
+.messages-list::-webkit-scrollbar {
+    margin-bottom: 10px;
+	width: 10px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+    background-color: #FFFFFF;
+    
+    margin-bottom: 12px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+    background-color: #EBEDEC;
+    
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
 }
