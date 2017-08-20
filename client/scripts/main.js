@@ -181,6 +181,7 @@
             minutes = '0' + minutes;
 
         img.setAttribute("class", "avatar");
+        img.setAttribute("alt", "");
         img.setAttribute("src", avatarUrl);
 
         cite.textContent = name;
@@ -221,6 +222,7 @@
         var del = document.createElement("button");
 
         del.setAttribute("tabIndex", "0");
+        del.setAttribute("aria-label", "Delete message #" + id);
         del.addEventListener("focusout", function() {
             del.style.display = "none";
         });
@@ -321,6 +323,8 @@
             
             postMessage(message, addNewMessage);
             form.elements[0].value = '';
+            var clone = form.querySelector('span');
+            clone.textContent = '';
             setLocalStorage(localUser.userInfo, '');
         });
     }

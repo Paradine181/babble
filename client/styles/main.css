@@ -86,8 +86,6 @@ section main {
 }
 
 section main .chat-info {
-    padding: 0 1.5em 0 1.5em;
-
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
@@ -124,8 +122,6 @@ section main .form-container {
     color: #292929;
     font-size: 14pt;
     font-weight: normal;
-    
-    object-fit: scale-down;
 }
 
 .chat-info dl,
@@ -148,10 +144,6 @@ section main .form-container {
     margin: auto 0;
     
     display: none;
-}
-
-.messages-list .message {
-    padding: 0 1em 0.5em 1.2em;
 }
 
 .messages-list .message .avatar {
@@ -230,77 +222,7 @@ section main .form-container {
     font-weight: normal;
 }
 
-@media screen and (min-width: 0) and (max-width: 320px) {
-    nav { display: none; }
-    main { flex: 1 1 auto; }
-    section main .chat-info { flex-wrap: wrap; }
-    section main .chat-info h1 { word-break: break-all; }
-    section main .messages-list { margin: 0 3px 0 0; }
-    section main .messages-list .message {
-        white-space: pre-wrap;
-        word-break: break-all;
-    }
-    .message-body header { flex-wrap: wrap; }
-    .form-container {
-        background-color: #F6F6F6;
-
-        border: 0;
-    }
-    .form-container form { flex-wrap: wrap; }
-    .expanding-textarea textarea {
-        border: 1px solid #D7D7D7;
-        border-radius: 0.7em;
-    }
-}
-
-@media screen and (min-width: 321px) and (max-width: 638px) {
-    nav { display: none; }  /* show it on small screens */
-    main { flex: 1 1 auto; }
-    section main .chat-info { flex-wrap: wrap; }
-    section main .chat-info h1 { word-break: normal; }
-    section main .messages-list { margin: 0 3px 0 0; }
-    section main .messages-list .message {
-        white-space: nowrap;
-        word-break: normal;
-    }
-    .message-body header { flex-wrap: wrap; }
-    .form-container {
-        background-color: #F6F6F6;
-
-        border: 0;
-    }
-    .form-container form { 
-        flex-wrap: wrap;
-        /*white-space: pre-wrap*/
-    }
-    .expanding-textarea textarea {
-        border: 1px solid #D7D7D7;
-        border-radius: 0.7em;
-    }
-}
-
-@media screen and (min-width: 639px) {
-    nav { display: inline-block; }   /* hide it elsewhere */
-    main { flex: 1 1 auto; }
-    section main .chat-info { flex-wrap: nowrap; }
-    section main .chat-info h1 { word-break: normal; }
-    section main .messages-list { margin: 0 10px 0 0; }
-    section main .messages-list .message {
-        white-space: nowrap;
-        word-break: normal;
-    }
-    .message-body header { flex-wrap: nowrap; }
-    .form-container {
-        background-color: #FFFFFF;
-
-        border: 1px solid #D7D7D7;
-    }
-    .form-container form { flex-wrap: nowrap; }
-    .expanding-textarea textarea { border: 0 }
-}
-
 .form-container form {
-    padding: 1em 2em 1em 1em;
     max-height: 300px;
 
     display: flex;
@@ -357,97 +279,119 @@ section main .form-container {
     flex: 0 1 content;
 }
 
+/* Registration Modal Style */
 .modal-overlay {
-	background-color: rgba(0, 0, 0, 0.7);
+	background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
 	height: 100%;
 	
+	display: none;
     position: fixed;
 	top: 0;
 	left: 0;
     z-index: 2;
-}
-
-.modal {
-    background-color: #F6F6F6;
-    box-shadow: 0 0 15px 0 #000000;
-
-    margin: auto;
-	border: 1px solid black;
-    max-width: 600px;
-	width: auto;
-	max-height: 300px;
-	height: auto;
-    
-    display: inline-block;
-	position: fixed;	
-	top: 0;
-	left: 0;	
-	right: 0;
-	bottom: 0;
-    
-    font-size: 9pt;
-    font-weight: normal;
-}
-
-.modal-overlay {
-	display: none;
+    text-align: center;
 }
 
 .modal-overlay:target {
 	display: block;
 }
 
-.modal h2 {
-    color: #FFFFFF;
+.modal {
+    background-color: #F9F9F9;
 
-    font-family: inherit;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: auto;
+    border: 1px solid #C9C9CA;
+    border-radius: 3px;
+    
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.modal h1 {
+    margin: 0;
+    padding: 0;
+
+    flex: 0 0 content;
+
+    color: #292929;
     font-size: 14pt;
+    font-weight: normal;
+    text-align: left;
 }
 
 .modal form {
-    padding: 20px;
+    padding: 1em 0;
 
-    font-size: inherit;
-    font-family: inherit;
+    display: inline-flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    
+    text-align: right;
 }
 
-.modal button {
-    color: #000000;
+.modal form table {
+    text-align: left;
+}
 
-    margin: 10px;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    
-    text-align: center;
-    font-family: inherit;
-    font-size: inherit;
+.modal label, .modal input {
+    display: inline;    
+}
+
+.modal form label {
+    color: #616161;
+    vertical-align: middle;
+}
+
+.modal form input {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    border: 1px solid #D7D7D7;
+    border-radius: 8px;
+    padding: 0.2em 0.6em;
+    width: 19em;
+
+    display: inline-block;
+    outline: none;
+
     font-weight: bold;
 }
 
-.confirm {
-    background-color: #61D290;
-}
-
-.discard {
-    background-color: #9E9E9E;
-}
-
-.modal form input[type=text],
-.modal form input[type=email],
 .modal form .form-controls {
-    width: 100%;
-
-    display: inline-block;
-}
-
-.modal form .form-controls {
-    text-align: center;
+    margin-top: auto;
+    flex: 0 0 auto;
+    align-items: flex-end;
 }
 
 .modal form button {
+    border: none;
+    margin: 0.3em 0.2em;
+    min-width: 5em;
+
     display: inline-block;
+
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.modal form .confirm {
+    color: #FFFFFF;
+    background: #7DD84E;
+    background: linear-gradient(#7DD84E, #48A371);
+}
+
+.modal form .discard {
+    color: #202729;
+    background: #D1D1D1;
+    background: linear-gradient(#D1D1D1, #B5B5B5);
 }
 
 /* Scroll Bar Style */
@@ -469,4 +413,144 @@ section main .form-container {
     
     border: 1px solid #DFDFDF;
     border-radius: 5px;
+}
+
+/* Responsiveness Styling (using media queries) */
+@media screen and (min-width: 0) and (max-width: 320px) {
+    nav { display: none; }
+    main { flex: 1 1 auto; }
+    section main .chat-info { flex-wrap: wrap; }
+    section main .chat-info h1 { word-break: break-all; }
+    section main .messages-list { margin: 0 3px 0 0; }
+    section main .messages-list .message {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    section main .chat-info,
+    section main .messages-list,
+    section main .messages-list .message,
+    section main .messages-list .message .message-body,
+    .form-container form {
+        padding: 1%;
+        word-break: break-all;
+    }
+    
+    .message-body header { flex-wrap: wrap; }
+    .form-container {
+        background-color: #F6F6F6;
+
+        border: 0;
+        padding: 0;
+    }
+    .form-container form { flex-wrap: wrap; }
+    .expanding-textarea textarea {
+        border: 1px solid #D7D7D7;
+        border-radius: 0.7em;
+    }
+    .modal {
+        padding: 5%;
+        width: 75%;
+        height: 80%;
+        word-break: break-all;
+    }
+    .modal form table {
+        max-width: 100%;
+    }
+    .modal form table tr .first-col {
+        padding: 5%;
+    }
+    .modal form table td {
+        display: block;
+    }
+    .modal form input,
+    .modal form button {
+        min-width: 90%;
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+@media screen and (min-width: 321px) and (max-width: 638px) {
+    nav { display: none; }  /* show it on small screens */
+    main { flex: 1 1 auto; }
+    section main .chat-info { 
+        padding: 0 1em 0 1em;
+        flex-wrap: wrap;
+    }
+    section main .chat-info h1 { word-break: normal; }
+    section main .messages-list { margin: 0 3px 0 0; }
+    section main .messages-list .message {
+        white-space: nowrap;
+        word-break: normal;
+    }
+    .messages-list .message {
+        margin-right: 4em;
+        padding: 0 1em 0.5em 0.5em;
+    }
+    .message-body header { flex-wrap: wrap; }
+    .form-container {
+        background-color: #F6F6F6;
+
+        border: 0;
+    }
+    .form-container form { 
+        padding: 1em 2em 1em 1em;
+        flex-wrap: wrap;
+    }
+    .expanding-textarea textarea {
+        border: 1px solid #D7D7D7;
+        border-radius: 0.7em;
+    }
+    .modal {
+        padding: 4em;
+        width: 75%;
+        height: 80%;
+    }
+    .modal form table tr .first-col {
+        padding: 1.5em 1px 1px 1px;
+    }
+    .modal form table td {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 639px) {
+    nav { display: inline-block; }   /* hide it elsewhere */
+    main { flex: 1 1 auto; }
+    section main .chat-info {
+        padding: 0 1.5em 0 1.5em;
+        flex-wrap: nowrap;
+    }
+    section main .chat-info h1 { word-break: normal; }
+    section main .messages-list { margin: 0 10px 0 0; }
+    section main .messages-list .message {
+        white-space: nowrap;
+        word-break: normal;
+    }
+    .messages-list .message {
+        padding: 0 1em 0.5em 1.2em;
+        margin-right: 1em;
+    }
+    .message-body header { flex-wrap: nowrap; }
+    .form-container {
+        background-color: #FFFFFF;
+
+        border: 1px solid #D7D7D7;
+    }
+    .form-container form {
+        padding: 1em 2em 1em 1em;
+        flex-wrap: nowrap;
+    }
+    .expanding-textarea textarea { border: 0 }
+    .modal {
+        padding: 1.6em;
+        width: auto;
+        height: auto;
+    }
+    .modal form table tr .first-col {
+        padding: 1px 1px 1px 1px;
+    }
+    .modal form table td {
+        display: table-cell;
+    }
 }
