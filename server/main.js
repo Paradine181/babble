@@ -76,7 +76,6 @@ http.createServer(function (request, response) {
                 switch (requestedUrl.href) {
                         case "/login": // usre logged in
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('log in');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 
                                         while (Babble.messagesClients.length > 0) {
@@ -92,7 +91,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/logout": // user logged out
                                 if (request.method === Babble.methods[1]) {
-                                        console.log('log out');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         usersUtils.deleteUser();
 
@@ -109,7 +107,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/messages?counter=" + queryObject.counter: // get messages request
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('get messages ' + queryObject.counter);    
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         if (messagesUtils.getMessagesCount() > queryObject.counter) {
                                                 var messages = messagesUtils.getMessages(queryObject.counter);
@@ -204,7 +201,6 @@ http.createServer(function (request, response) {
                         case "/messages" + messageId: // delete a message
                                 if (request.method === Babble.methods[2]) {
                                         messageId = messageId.substring(1);
-                                        console.log('delete message ' + messageId);
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 
                                         messagesUtils.deleteMessage(messageId);
@@ -221,7 +217,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/stats": // get stats request
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('get stats');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end(JSON.stringify({users: usersUtils.getUsers(), messages: messagesUtils.getMessagesCount()}));
                                 } else {
