@@ -321,6 +321,8 @@
             
             postMessage(message, addNewMessage);
             form.elements[0].value = '';
+            var clone = form.querySelector('span');
+            clone.textContent = '';
             setLocalStorage(localUser.userInfo, '');
         });
     }
