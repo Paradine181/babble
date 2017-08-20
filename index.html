@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Vegans - Babble</title>
+
+        <link rel="stylesheet" href="styles/main.css">
+
+        <script async type="text/javascript" src="scripts/main.js"></script>
+	</head>
+
+	<body>
+		<header>
+            <img src="images/logo.gif" aria-label="Babble - Talk freely" alt="Babble - Talk freely" />
+		</header>
+
+        <section>
+            <h1>Vegans</h1>
+            <nav>
+                <h2>Chat Rooms</h2>
+            </nav>
+            
+            <main>
+                <header class="chat-info">
+                    <h1 aria-label="Vegans">Vegans</h1>
+
+                    <dl class="chat-info-counters">
+                        <dt><span aria-label="Number of Messages in Channel"></span></dt>
+                        <dd class="chat-info-counters-messages"><img alt="users count" src="images/messages.png" /><span class="messages-counter"></span></dd>
+                        <dt><span aria-label="Number of Users in Channel"></span></dt>
+                        <dd class="chat-info-counters-users"><img alt="messages count" src="images/users.png" /><span class="users-counter"></span></dd>
+                    </dl>
+                </header>
+
+                <ol aria-label="Chat Messages" class="messages-list" id="messages-list"> </ol>
+
+                <footer class="form-container">
+                    <form method="POST" action="http://localhost:9000" class="js-growable">
+                        <div class="expanding-textarea">
+                            <pre><span></span><br></pre>
+                            <textarea name="message-content" placeholder="Type a message" aria-label="New Message Content" ></textarea>
+                        </div>
+                        <input alt="Sendd New Message" aria-label="Send New Message" class="submit-button" type="image" src="images/send.gif" />
+                    </form>
+                </footer>
+            </main>
+        </section>
+
+        <!-- registration / login form -->
+        <!-- will appear only if user hasn't signed in with an email address yet -->
+        <div class="modal-overlay">
+            <div class="modal" id="registration-form">
+                <h1 aria-label="Who are you?">Who are you?</h1>
+                <form action="#">
+                    <table>
+                        <tr>
+                            <td class="first-col"><label for="name">Full name:</label></td>
+                            <td class="last-col"><input type="text" id="name" aria-label="Full Name" /></td>
+                        </tr>
+                        <tr>
+                            <td class="first-col"><label for="email">Email:</label></td>
+                            <td class="last-col"><input type="email" id="email" aria-label="Email Address" /></td>
+                        </tr>
+                    </table>
+                    <div class="form-controls">
+                        <button class="discard" aria-label="Stay Anonymous">Stay Anonymous</button>
+                        <button class="confirm" aria-label="Save Details">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</body>
+</html>
