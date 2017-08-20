@@ -4,6 +4,8 @@
      * Actions to be done when the page loads
      */
      window.addEventListener('load', function() {
+        loadDeferredStyles();
+
         var form = document.querySelector('form');
         document.querySelector('.chat-info-counters-messages').querySelector('span').textContent = 0;
 
@@ -23,6 +25,14 @@
         var form = document.querySelector('form');
         navigator.sendBeacon(form.action + 'logout'); // send logout message to server (so that it can update the users counter)
     });
+
+    function loadDeferredStyles() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement)
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    }
 
     // Based on: link sent on slack and on https://alistapart.com/article/expanding-text-areas-made-elegant
     function makeGrowable(container) {
