@@ -27,7 +27,7 @@
     });
 
     function loadDeferredStyles() {
-        var addStylesNode = document.getElementById("deferred-styles");
+        var addStylesNode = document.querySelector("#deferred-styles");
         var replacement = document.createElement("div");
         replacement.innerHTML = addStylesNode.textContent;
         document.body.appendChild(replacement)
