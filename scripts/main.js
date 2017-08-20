@@ -10,8 +10,6 @@
         document.querySelector('.chat-info-counters-messages').querySelector('span').textContent = 0;
 
         logIn();
-        getStats(setStats);
-        getMessages(0, handleMessages);
 
         makeGrowable(document.querySelector('.expanding-textarea'));
 
@@ -86,10 +84,14 @@
             var modalConfirm = modal.querySelector('.confirm').addEventListener('click', function() {
                 register(new UserInfo(document.querySelector('#name').value, document.querySelector('#email').value));
                 document.querySelector('.modal-overlay').style.display = 'none';
+                getStats(setStats);
+                getMessages(0, handleMessages);
             });
             var modalDiscard = modal.querySelector('.discard').addEventListener('click', function() {
                 register(new UserInfo('', ''));
                 document.querySelector('.modal-overlay').style.display = "none";
+                getStats(setStats);
+                getMessages(0, handleMessages);
             });
         } else {
             var currentMessage = localUser.currentMessage;
@@ -98,6 +100,8 @@
             setLocalStorage(localStorage.userInfo, currentMessage);
             document.querySelector('.modal-overlay').style.display = "none";
             form.elements[0].value = localUser.currentMessage;
+            getStats(setStats);
+            getMessages(0, handleMessages);
         }
     }
 
@@ -316,7 +320,6 @@
                 errorCallback();
             }
         });
-        xhr.timeout = 400;
         xhr.send(JSON.stringify(data));
     }
 
