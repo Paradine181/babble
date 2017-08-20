@@ -13,7 +13,6 @@
     return {
         getMessages: function(number) {
             var requiredMessages = []
-            console.log('number=' + number + ' length=' + messages.length);
             if (number < messages.length)
                 requiredMessages.push(messages[number].message);
             /*for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
@@ -59,7 +58,6 @@
             for (i = messages.length - 1; i >= 0; i--) {
                 if (messages[i].id == id) {
                     messages.splice(i, 1);
-                    console.log('deleted');
                     return;
                 }
             }

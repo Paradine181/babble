@@ -13,28 +13,10 @@ var Babble = {
         statsClients: []
 };
 
-function messageEachUser() {
-        while (Babble.clients.length > 0) {
-                var client = Babble.clients.pop();
-                var responseData = {
-                        usersCount: Babble.users,
-                        messagesCount: Babble.messages.length,
-                        messages: Babble.messages.slice(client.messagesCount)
-                }
-                client.client.end(JSON.stringify(new Message("newMessages", responseData)));
-        }
-}
-
-function messageAllUsers(message) {
-        while (Babble.clients.length > 0) {
-                var client = Babble.clients.pop();
-                client.client.end(JSON.stringify(message));
-        }
-}
-
 function UserMessagesRequest(response, counter) {
         this.response = response;
         this.counter = counter;
+        this.timestamp = new Date().getTime();
 }
 
 http.createServer(function (request, response) {
@@ -76,7 +58,6 @@ http.createServer(function (request, response) {
                 switch (requestedUrl.href) {
                         case "/login": // usre logged in
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('log in');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 
                                         while (Babble.messagesClients.length > 0) {
@@ -92,7 +73,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/logout": // user logged out
                                 if (request.method === Babble.methods[1]) {
-                                        console.log('log out');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         usersUtils.deleteUser();
 
@@ -109,7 +89,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/messages?counter=" + queryObject.counter: // get messages request
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('get messages ' + queryObject.counter);    
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         if (messagesUtils.getMessagesCount() > queryObject.counter) {
                                                 var messages = messagesUtils.getMessages(queryObject.counter);
@@ -204,7 +183,6 @@ http.createServer(function (request, response) {
                         case "/messages" + messageId: // delete a message
                                 if (request.method === Babble.methods[2]) {
                                         messageId = messageId.substring(1);
-                                        console.log('delete message ' + messageId);
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 
                                         messagesUtils.deleteMessage(messageId);
@@ -221,7 +199,6 @@ http.createServer(function (request, response) {
                                 break;
                         case "/stats": // get stats request
                                 if (request.method === Babble.methods[0]) {
-                                        console.log('get stats');
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end(JSON.stringify({users: usersUtils.getUsers(), messages: messagesUtils.getMessagesCount()}));
                                 } else {
@@ -237,6 +214,18 @@ http.createServer(function (request, response) {
 }).listen(9000, 'localhost');
 
 console.log('Server running.');
+ 
+setInterval(function() {
+	// close out requests older than 30 seconds
+	var expiration = new Date().getTime() - 30000;
+	var response;
+	for (var i = Babble.messagesClients.length - 1; i>= 0; i--) {
+		if (Babble.messagesClients[i].timestamp < expiration) {
+			response = Babble.messagesClients[i].response;
+			response.end(JSON.stringify([]));
+		}
+	}
+}, 1000);
 
 // based on: https://en.wikipedia.org/wiki/MD5
 var MD5 = function (string) {
