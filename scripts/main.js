@@ -316,6 +316,7 @@
                 errorCallback();
             }
         });
+        xhr.timeout = 400;
         xhr.send(JSON.stringify(data));
     }
 
