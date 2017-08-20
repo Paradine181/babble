@@ -54,7 +54,7 @@ body > header h1 {
 section {
     flex: 1 1 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: stretch;
 }
 
