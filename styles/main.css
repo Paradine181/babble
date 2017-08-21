@@ -32,10 +32,6 @@ body > header img {
     object-fit: scale-down;
 }
 
-body > header h1 {
-    display: hidden;
-}
-
 section {
     flex: 1 1 100%;
     display: flex;
