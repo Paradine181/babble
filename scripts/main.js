@@ -6,9 +6,9 @@
      window.addEventListener('load', function() {
         loadDeferredStyles();
 
-        var form = document.querySelector('form');
+        var form = document.querySelector('.js-growable');
 
-        logIn();
+        logIn(form);
 
         makeGrowable(document.querySelector('.expanding-textarea'));
 
@@ -74,9 +74,8 @@
         localStorage.setItem("babble", JSON.stringify(user));
     }
 
-    function logIn() {
+    function logIn(form) {
         var localUser = getLocalStorage();
-        var form = document.querySelector('form');
         if (typeof(Storage) === 'undefined' || localUser === null) { // Code for localStorage + getting the username
             var modal = document.querySelector('.modal-overlay');
             modal.style.display = 'block';
@@ -115,7 +114,7 @@
     function register(userInfo) {
         var form = document.querySelector("form");
         setLocalStorage(userInfo, '');
-        sendRequestToServer('GET', form.action + 'login', null,
+        sendRequestToServer('GET', 'login', null,
         function(e) {
             var userId = e.id;
             document.querySelector('.modal-overlay').style.display = 'none';
@@ -146,7 +145,7 @@
      */
     function getMessages(counter, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('GET', form.action + 'messages?counter=' + counter, null,
+        sendRequestToServer('GET', 'messages?counter=' + counter, null,
         function(e) {
             callback(counter, e);
         }, function() {
@@ -270,7 +269,7 @@
 
     function postMessage(message, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('POST', form.action + 'messages', message,
+        sendRequestToServer('POST', 'messages', message,
         function(e) {
             addDeleteMessage(e.id);
         }, function() {
@@ -280,14 +279,14 @@
 
     function deleteMessage(id, callback) {
         form = document.querySelector('form');
-        sendRequestToServer('DELETE', form.action + 'messages/' + id, null, callback, function() {
+        sendRequestToServer('DELETE', 'messages/' + id, null, callback, function() {
             deleteMessage(id, callback)
         });
     }
 
     function getStats(callback) {
         form = document.querySelector('form');
-        sendRequestToServer('GET', form.action + 'stats', null,
+        sendRequestToServer('GET', 'stats', null,
         function(e) {
             callback(e.users, e.messages);
         }, function() {
@@ -309,7 +308,7 @@
      */
     function sendRequestToServer(method, action, data, callback, errorCallback) {
         var xhr = new XMLHttpRequest();
-        xhr.open(method, action);
+        xhr.open(method, 'http://localhost:9000/' + action);
         if (method.toUpperCase() === 'POST') {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         }
