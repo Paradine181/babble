@@ -1,84 +1,51 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
-html, body {
+html {
     height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
 }
 
 body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    word-wrap: break-word;
-    
-    font-family: 'Nunito', sans-serif;
-}
-
-body * {
-    font-family: inherit;
-}
-
-img {
-    max-width: 100%;
-    
-    object-fit: scale-down;
 }
 
 body > header {
     background-color: #353744;
-
-    margin: 0;
     padding: 0 1em;
     height: 5em;
-
     flex: 0 0 auto;
     display: flex;
-    flex-direction: row;
     align-items: center;
 }
 
-body > header img {
-    width: auto;
+body > header > img {
     height: 3.5em;
-
     flex: 0 0 auto;
-}
-
-body > header h1 {
-    display: hidden;
+    max-width: 100%;
+    object-fit: scale-down;
 }
 
 section {
-    flex: 1 1 100%;
+    height: 100%;
+    flex: 1 1 auto;
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
 }
 
 section > h1 {
     display: none;
+    visibility: hidden;
 }
 
 section nav {
     background-color: #61D290;
-
     height: 100%;
-
     flex: 0 0 11.5em;
-}
-
-section nav > h2 {
-    display: none;
 }
 
 section main {
     background-color: #F6F6F6;
-
     height: 100%;
-    
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -88,14 +55,13 @@ section main {
 section main .chat-info {
     flex: 0 0 auto;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    word-wrap: break-word;
 }
 
 section main .messages-list {
     padding: 0;
     min-height: 20px;
-
     flex: 1 1 auto;
     list-style-type: none;
     overflow-x: hidden;
@@ -106,20 +72,18 @@ section main .messages-list {
 
 section main .form-container {
     width: 100%;
-    
     flex: 1 1 content;
-    
     font-size: 9pt;
     font-weight: normal;
+    word-wrap: break-word;
 }
 
 .chat-info h1 {
     margin: 0.6em 0;
     padding: 0;
-
     display: inline;
-    
     color: #292929;
+    font-family: 'Nunito', sans-serif;
     font-size: 14pt;
     font-weight: normal;
 }
@@ -130,11 +94,10 @@ section main .form-container {
 .chat-info dd img,
 .chat-info dd span {
     margin: auto 0;
-    
     display: inline;
     vertical-align: middle;
-
     color: #353744;
+    font-family: 'Nunito', sans-serif;
     font-size: 9pt;
     font-weight: bold;
     word-wrap: break-word;
@@ -142,8 +105,8 @@ section main .form-container {
 
 .chat-info dt span {
     margin: auto 0;
-    
     display: none;
+    visibility: hidden;
 }
 
 .messages-list .message .avatar {
@@ -151,42 +114,37 @@ section main .form-container {
     border-radius: 50%;
     width: 1.8em;
     height: 1.8em;
-    
     vertical-align: top;
 }
 
 .messages-list .message .message-body {
     background-color: #ffffff;
-    
     margin-left: 8px;
     border: 1px solid #DFDFDF;
     border-radius: 10px;
     padding: 0.2em 0.4em 0.2em 0.4em;
     max-width: 600px;
-    
     display: inline-block;
     vertical-align: top;
+    font-family: 'Nunito', sans-serif;
     white-space: pre-wrap;
 }
 
 .messages-list .message .message-body:hover,
 .messages-list .message .message-body:focus {
     background-color: #EBEDEC;
-
     border: 1px solid #D8D8D8;
     outline: none;
 }
 
 .message-body header {
     width: 100%;
-
     display: flex;
-    flex-direction: row;
 }
 
 .message-body cite {
     margin: auto 0;
-
+    font-family: 'Nunito', sans-serif;
     font-size: 0.75em;
     font-weight: bold;
     font-style: normal;
@@ -194,9 +152,8 @@ section main .form-container {
 
 .message-body time {
     margin: auto 0.7em;
-
     flex: 1;
-
+    font-family: 'Nunito', sans-serif;
     font-size: 0.7em;
     font-weight: normal;
 }
@@ -204,34 +161,30 @@ section main .form-container {
 .message-body button {
     background: url(../images/delete.png);
     background-repeat: no-repeat;
-
     margin: auto 0 auto 0;
     border: none;
     padding: 0;
     width: 0.75em;
     height: 0.75em;
-
     display: none;
+    visibility:hidden;
     vertical-align: middle;
 }
 
 .message-body p {
     margin: 0;
-
+    font-family: 'Nunito', sans-serif;
     font-size: 0.75em;
     font-weight: normal;
 }
 
 .form-container form {
     max-height: 300px;
-
     display: flex;
-    flex-direction: row;
 }
 
 .expanding-textarea {
     min-width: 1em;
-
     flex: 1;
     position: relative;
 }
@@ -240,16 +193,15 @@ section main .form-container {
 .expanding-textarea pre {
     box-sizing: border-box;
     background: transparent;
+    font-family: 'Nunito', sans-serif;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
 .expanding-textarea textarea {
     background-color: #FFFFFF;
-
     width: 100%;
     height: 100%;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -268,14 +220,11 @@ section main .form-container {
 }
 
 .form-container form .submit-button {
-    object-fit: scale-down;
-
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 1em;
     width: auto;
     height: 3em;
-    
     flex: 0 1 content;
 }
 
@@ -284,8 +233,8 @@ section main .form-container {
 	background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
 	height: 100%;
-	
 	display: none;
+    visibility:hidden;
     position: fixed;
 	top: 0;
 	left: 0;
@@ -299,19 +248,16 @@ section main .form-container {
 
 .modal {
     background-color: #F9F9F9;
-
     overflow-y: auto;
     overflow-x: hidden;
     margin: auto;
     border: 1px solid #C9C9CA;
     border-radius: 3px;
-    
     display: inline-flex;
     flex-direction: column;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-    
     font-size: 9pt;
     font-weight: normal;
 }
@@ -319,10 +265,9 @@ section main .form-container {
 .modal h1 {
     margin: 0;
     padding: 0;
-
     flex: 0 0 content;
-
     color: #292929;
+    font-family: 'Nunito', sans-serif;
     font-size: 14pt;
     font-weight: normal;
     text-align: left;
@@ -330,11 +275,9 @@ section main .form-container {
 
 .modal form {
     padding: 1em 0;
-
     display: inline-flex;
     flex: 1 1 auto;
     flex-direction: column;
-    
     text-align: right;
 }
 
@@ -344,6 +287,7 @@ section main .form-container {
 
 .modal label, .modal input {
     display: inline;    
+    font-family: 'Nunito', sans-serif;
 }
 
 .modal form label {
@@ -358,10 +302,8 @@ section main .form-container {
     border-radius: 8px;
     padding: 0.2em 0.6em;
     width: 19em;
-
     display: inline-block;
     outline: none;
-
     font-weight: bold;
 }
 
@@ -375,9 +317,8 @@ section main .form-container {
     border: none;
     margin: 0.3em 0.2em;
     min-width: 5em;
-
     display: inline-block;
-
+    font-family: 'Nunito', sans-serif;
     font-size: 1.1em;
     font-weight: 500;
 }
@@ -402,7 +343,6 @@ section main .form-container {
 
 .messages-list::-webkit-scrollbar-track {
     background-color: #FFFFFF;
-    
     margin-bottom: 12px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
@@ -410,14 +350,16 @@ section main .form-container {
 
 .messages-list::-webkit-scrollbar-thumb {
     background-color: #EBEDEC;
-    
     border: 1px solid #DFDFDF;
     border-radius: 5px;
 }
 
 /* Responsiveness Styling (using media queries) */
-@media screen and (min-width: 0) and (max-width: 320px) {
-    nav { display: none; }
+@media only screen and (min-width: 0) and (max-width: 320px) {
+    nav {
+        display: none;
+        visibility:hidden;
+    }
     main { flex: 1 1 auto; }
     section main .chat-info { flex-wrap: wrap; }
     section main .chat-info h1 { word-break: break-all; }
@@ -438,7 +380,6 @@ section main .form-container {
     .message-body header { flex-wrap: wrap; }
     .form-container {
         background-color: #F6F6F6;
-
         border: 0;
         padding: 0;
     }
@@ -470,8 +411,11 @@ section main .form-container {
     }
 }
 
-@media screen and (min-width: 321px) and (max-width: 638px) {
-    nav { display: none; }  /* show it on small screens */
+@media only screen and (min-width: 321px) and (max-width: 638px) {
+    nav {
+        display: none;
+        visibility:hidden;
+    }
     main { flex: 1 1 auto; }
     section main .chat-info { 
         padding: 0 1em 0 1em;
@@ -490,7 +434,6 @@ section main .form-container {
     .message-body header { flex-wrap: wrap; }
     .form-container {
         background-color: #F6F6F6;
-
         border: 0;
     }
     .form-container form { 
@@ -514,7 +457,7 @@ section main .form-container {
     }
 }
 
-@media screen and (min-width: 639px) {
+@media only screen and (min-width: 639px) {
     nav { display: inline-block; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
     section main .chat-info {
@@ -534,7 +477,6 @@ section main .form-container {
     .message-body header { flex-wrap: nowrap; }
     .form-container {
         background-color: #FFFFFF;
-
         border: 1px solid #D7D7D7;
     }
     .form-container form {

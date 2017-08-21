@@ -108,7 +108,6 @@ http.createServer(function (request, response) {
                                         } else {
                                                 Babble.messagesClients.push(new UserMessagesRequest(response, queryObject.counter));
                                         }
-                                        //response.end();
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();
