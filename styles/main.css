@@ -43,11 +43,6 @@ section {
     align-items: stretch;
 }
 
-section > h1 {
-    display: none;
-    font-family: 'Nunito', sans-serif;
-}
-
 section nav {
     background-color: #61D290;
     height: 100%;
@@ -116,6 +111,7 @@ section main .form-container {
 .chat-info dt span {
     margin: auto 0;
     display: none;
+    visibility: hidden;
 }
 
 .messages-list .message .avatar {
@@ -177,6 +173,7 @@ section main .form-container {
     width: 0.75em;
     height: 0.75em;
     display: none;
+    visibility:hidden;
     vertical-align: middle;
 }
 
@@ -244,6 +241,7 @@ section main .form-container {
     width: 100%;
 	height: 100%;
 	display: none;
+    visibility:hidden;
     position: fixed;
 	top: 0;
 	left: 0;
@@ -365,7 +363,10 @@ section main .form-container {
 
 /* Responsiveness Styling (using media queries) */
 @media screen and (min-width: 0) and (max-width: 320px) {
-    nav { display: none; }
+    nav {
+        display: none;
+        visibility:hidden;
+    }
     main { flex: 1 1 auto; }
     section main .chat-info { flex-wrap: wrap; }
     section main .chat-info h1 { word-break: break-all; }
@@ -418,7 +419,10 @@ section main .form-container {
 }
 
 @media screen and (min-width: 321px) and (max-width: 638px) {
-    nav { display: none; }  /* show it on small screens */
+    nav {
+        display: none;
+        visibility:hidden;
+    }
     main { flex: 1 1 auto; }
     section main .chat-info { 
         padding: 0 1em 0 1em;
