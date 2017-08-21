@@ -1,31 +1,25 @@
-html, body {
+html {
     height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
 }
 
 body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    word-wrap: break-word;
 }
 
 body > header {
     background-color: #353744;
-    margin: 0;
     padding: 0 1em;
     height: 5em;
     flex: 0 0 auto;
     display: flex;
-    flex-direction: row;
     align-items: center;
 }
 
-body > header img {
-    width: auto;
+body > header > img {
     height: 3.5em;
     flex: 0 0 auto;
     max-width: 100%;
@@ -33,10 +27,14 @@ body > header img {
 }
 
 section {
-    flex: 1 1 100%;
+    height: 100%;
+    flex: 1 1 auto;
     display: flex;
-    flex-direction: row-reverse;
-    align-items: stretch;
+}
+
+section > h1 {
+    display: none;
+    visibility: hidden;
 }
 
 section nav {
@@ -57,8 +55,8 @@ section main {
 section main .chat-info {
     flex: 0 0 auto;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    word-wrap: break-word;
 }
 
 section main .messages-list {
@@ -77,6 +75,7 @@ section main .form-container {
     flex: 1 1 content;
     font-size: 9pt;
     font-weight: normal;
+    word-wrap: break-word;
 }
 
 .chat-info h1 {
@@ -141,7 +140,6 @@ section main .form-container {
 .message-body header {
     width: 100%;
     display: flex;
-    flex-direction: row;
 }
 
 .message-body cite {
@@ -183,7 +181,6 @@ section main .form-container {
 .form-container form {
     max-height: 300px;
     display: flex;
-    flex-direction: row;
 }
 
 .expanding-textarea {

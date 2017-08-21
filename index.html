@@ -7,35 +7,15 @@
 	</head>
 
 	<body>
-        <!-- registration / login form -->
-        <!-- will appear only if user hasn't signed in with an email address yet -->
-        <div class="modal-overlay">
-            <div class="modal" id="registration-form">
-                <h1 aria-label="Who are you?">Who are you?</h1>
-                <form action="#">
-                    <table>
-                        <tr>
-                            <td class="first-col"><label for="name">Full name:</label></td>
-                            <td class="last-col"><input type="text" id="name" aria-label="Full Name" /></td>
-                        </tr>
-                        <tr>
-                            <td class="first-col"><label for="email">Email:</label></td>
-                            <td class="last-col"><input type="email" id="email" aria-label="Email Address" /></td>
-                        </tr>
-                    </table>
-                    <div class="form-controls">
-                        <button class="discard" aria-label="Stay Anonymous">Stay Anonymous</button>
-                        <button class="confirm" aria-label="Save Details">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
 		<header>
             <img src="images/logo.gif" aria-label="Babble - Talk freely" alt="Babble - Talk freely" />
 		</header>
 
         <section>
+            <h1>Vegans</h1>
+
+            <nav></nav>
+            
             <main>
                 <header class="chat-info">
                     <h1 aria-label="Vegans">Vegans</h1>
@@ -60,14 +40,36 @@
                     </form>
                 </footer>
             </main>
-
-            <nav></nav>
         </section>
+
+        <!-- registration / login form -->
+        <!-- will appear only if user hasn't signed in with an email address yet -->
+        <div class="modal-overlay">
+            <div class="modal" id="registration-form">
+                <h1 aria-label="Who are you?">Who are you?</h1>
+                <form action="#">
+                    <table>
+                        <tr>
+                            <td class="first-col"><label for="name">Full name:</label></td>
+                            <td class="last-col"><input type="text" id="name" aria-label="Full Name" /></td>
+                        </tr>
+                        <tr>
+                            <td class="first-col"><label for="email">Email:</label></td>
+                            <td class="last-col"><input type="email" id="email" aria-label="Email Address" /></td>
+                        </tr>
+                    </table>
+                    <div class="form-controls">
+                        <button class="discard" aria-label="Stay Anonymous">Stay Anonymous</button>
+                        <button class="confirm" aria-label="Save Details">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         
+        <script async type="text/javascript" src="scripts/main.js"></script>
         <noscript id="deferred-styles">
             <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito">
             <link rel="stylesheet" type="text/css" href="styles/main.css">
         </noscript>
-        <script async type="text/javascript" src="scripts/main.js"></script>
 	</body>
 </html>

@@ -7,7 +7,6 @@
         loadDeferredStyles();
 
         var form = document.querySelector('form');
-        document.querySelector('.chat-info-counters-messages').querySelector('span').textContent = 0;
 
         logIn();
 
