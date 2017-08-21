@@ -81,15 +81,18 @@
         if (typeof(Storage) === 'undefined' || localUser === null) { // Code for localStorage + getting the username
             var modal = document.querySelector('.modal-overlay');
             modal.style.display = 'block';
+            modal.style.visibility = 'visible';
             var modalConfirm = modal.querySelector('.confirm').addEventListener('click', function() {
                 register(new UserInfo(document.querySelector('#name').value, document.querySelector('#email').value));
                 document.querySelector('.modal-overlay').style.display = 'none';
+                document.querySelector('.modal-overlay').style.visibility = 'hidden';
                 getStats(setStats);
                 getMessages(0, handleMessages);
             });
             var modalDiscard = modal.querySelector('.discard').addEventListener('click', function() {
                 register(new UserInfo('', ''));
-                document.querySelector('.modal-overlay').style.display = "none";
+                document.querySelector('.modal-overlay').style.display = 'none';
+                document.querySelector('.modal-overlay').style.visibility = 'hidden';
                 getStats(setStats);
                 getMessages(0, handleMessages);
             });
@@ -98,7 +101,8 @@
             register(new UserInfo(localUser.userInfo.name, localUser.userInfo.email));
             var localStorage = getLocalStorage();
             setLocalStorage(localStorage.userInfo, currentMessage);
-            document.querySelector('.modal-overlay').style.display = "none";
+            document.querySelector('.modal-overlay').style.display = 'none';
+            document.querySelector('.modal-overlay').style.visibility = 'hidden';
             form.elements[0].value = localUser.currentMessage;
             getStats(setStats);
             getMessages(0, handleMessages);
@@ -115,7 +119,8 @@
         sendRequestToServer('GET', form.action + 'login', null,
         function(e) {
             var userId = e.id;
-            document.querySelector('.modal-overlay').style.display = "none";
+            document.querySelector('.modal-overlay').style.display = 'none';
+            document.querySelector('.modal-overlay').style.visibility = 'hidden';
         }, function() {
             register(userInfo);
         });
@@ -239,6 +244,7 @@
         del.setAttribute("aria-label", "Delete message #" + id);
         del.addEventListener("focusout", function() {
             del.style.display = "none";
+            del.style.visibility = "hidden";
         });
 
         del.addEventListener("click", function() {
@@ -247,14 +253,17 @@
 
         div.addEventListener("focusin", function() {
             del.style.display = "inline";
+            del.style.visibility = "visible";
         });
 
         div.addEventListener("mouseenter", function() {
             del.style.display = "inline";
+            del.style.visibility = "visible";
         });
 
         div.addEventListener("mouseleave", function() {
             del.style.display = "none";
+            del.style.visibility = "hidden";
         });
 
         messageHeader.appendChild(del);
