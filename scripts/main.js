@@ -19,7 +19,7 @@
      * Actions to be done before page is unloaded
      */
     window.addEventListener('beforeunload', function() {
-        var form = document.querySelector('form');
+        var form = document.querySelector('.js-growable');
         navigator.sendBeacon(form.action + 'logout'); // send logout message to server (so that it can update the users counter)
     });
 
