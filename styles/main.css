@@ -11,11 +11,6 @@ body {
     flex-direction: column;
     align-items: stretch;
     word-wrap: break-word;
-    font-family: 'Nunito', sans-serif;
-}
-
-body * {
-    font-family: inherit;
 }
 
 body > header {
@@ -50,16 +45,13 @@ section {
 
 section > h1 {
     display: none;
+    font-family: 'Nunito', sans-serif;
 }
 
 section nav {
     background-color: #61D290;
     height: 100%;
     flex: 0 0 11.5em;
-}
-
-section nav > h2 {
-    display: none;
 }
 
 section main {
@@ -101,6 +93,7 @@ section main .form-container {
     padding: 0;
     display: inline;
     color: #292929;
+    font-family: 'Nunito', sans-serif;
     font-size: 14pt;
     font-weight: normal;
 }
@@ -114,6 +107,7 @@ section main .form-container {
     display: inline;
     vertical-align: middle;
     color: #353744;
+    font-family: 'Nunito', sans-serif;
     font-size: 9pt;
     font-weight: bold;
     word-wrap: break-word;
@@ -141,6 +135,7 @@ section main .form-container {
     max-width: 600px;
     display: inline-block;
     vertical-align: top;
+    font-family: 'Nunito', sans-serif;
     white-space: pre-wrap;
 }
 
@@ -159,6 +154,7 @@ section main .form-container {
 
 .message-body cite {
     margin: auto 0;
+    font-family: 'Nunito', sans-serif;
     font-size: 0.75em;
     font-weight: bold;
     font-style: normal;
@@ -167,6 +163,7 @@ section main .form-container {
 .message-body time {
     margin: auto 0.7em;
     flex: 1;
+    font-family: 'Nunito', sans-serif;
     font-size: 0.7em;
     font-weight: normal;
 }
@@ -185,6 +182,7 @@ section main .form-container {
 
 .message-body p {
     margin: 0;
+    font-family: 'Nunito', sans-serif;
     font-size: 0.75em;
     font-weight: normal;
 }
@@ -205,6 +203,7 @@ section main .form-container {
 .expanding-textarea pre {
     box-sizing: border-box;
     background: transparent;
+    font-family: 'Nunito', sans-serif;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
@@ -277,6 +276,7 @@ section main .form-container {
     padding: 0;
     flex: 0 0 content;
     color: #292929;
+    font-family: 'Nunito', sans-serif;
     font-size: 14pt;
     font-weight: normal;
     text-align: left;
@@ -296,6 +296,7 @@ section main .form-container {
 
 .modal label, .modal input {
     display: inline;    
+    font-family: 'Nunito', sans-serif;
 }
 
 .modal form label {
@@ -326,6 +327,7 @@ section main .form-container {
     margin: 0.3em 0.2em;
     min-width: 5em;
     display: inline-block;
+    font-family: 'Nunito', sans-serif;
     font-size: 1.1em;
     font-weight: 500;
 }
