@@ -355,7 +355,7 @@ section main .form-container {
 }
 
 /* Responsiveness Styling (using media queries) */
-@media screen and (min-width: 0) and (max-width: 320px) {
+@media only screen and (min-width: 0) and (max-width: 320px) {
     nav {
         display: none;
         visibility:hidden;
@@ -411,7 +411,7 @@ section main .form-container {
     }
 }
 
-@media screen and (min-width: 321px) and (max-width: 638px) {
+@media only screen and (min-width: 321px) and (max-width: 638px) {
     nav {
         display: none;
         visibility:hidden;
@@ -457,7 +457,7 @@ section main .form-container {
     }
 }
 
-@media screen and (min-width: 639px) {
+@media only screen and (min-width: 639px) {
     nav { display: inline-block; }   /* hide it elsewhere */
     main { flex: 1 1 auto; }
     section main .chat-info {
