@@ -48,7 +48,7 @@ http.createServer(function (request, response) {
         } else if (pathnameArray.length < 2 || pathnameArray.length > 3 || (pathnameArray.length === 3 && pathnameArray[1] !== Babble.pathnames[0])) { // check for valid pathname
                 response.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end();
-        } else if (pathnameArray.length === 3 && (!Number.isInteger(parseInt(pathnameArray[2], 10)) || parseInt(pathnameArray[2], 10) < 1 || parseInt(pathnameArray[2], 10) > 7)) {
+        } else if (pathnameArray.length === 3 && (!Number.isInteger(parseInt(pathnameArray[2], 10)) || parseInt(pathnameArray[2], 10) < 1 || parseInt(pathnameArray[2], 10) > messagesUtils.getLastMessageId())) {
                 response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end();
         } else if (requestedUrl.search !== '' && (typeof requestedUrl.query.counter === "undefined" || !Number.isInteger(parseInt(requestedUrl.query.counter, 10)) || JSON.stringify(requestedUrl.query) !== JSON.stringify({ counter: requestedUrl.query.counter }))) {
@@ -169,7 +169,6 @@ http.createServer(function (request, response) {
                                                                         }
                                                                         client.response.end(JSON.stringify(fullMessages));
                                                                 }
-
                                                                 response.end(JSON.stringify({id: id}));
                                                         });
                                                 });
@@ -184,13 +183,13 @@ http.createServer(function (request, response) {
                                         messageId = messageId.substring(1);
                                         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 
-                                        messagesUtils.deleteMessage(messageId);
+                                        var deletedId = messagesUtils.deleteMessage(messageId);
 
                                         while (Babble.messagesClients.length > 0) {
                                                 var client = Babble.messagesClients.pop();
                                                 client.response.end(JSON.stringify([{id: messageId}]));
                                         }
-                                        response.end();
+                                        response.end(JSON.stringify(deletedId >= 0));
                                 } else {
                                         response.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
                                         response.end();

@@ -9,42 +9,17 @@
 }(this, function() {
     var messages = [];
     var messageId = 0;
-    var lastRequestedId = 0;
     return {
         getMessages: function(number) {
             var requiredMessages = []
-            if (number < messages.length)
-                requiredMessages.push(messages[number].message);
-            /*for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
-                if (messages[i].id > lastRequestedId) {
-                    requiredMessages.push({
-                        name: messages[i].name,
-                        email: messages[i].email,
-                        avatar: messages[i].avatar,
-                        message: messages[i].message,
-                        timestamp: messages[i].timestamp
-                    });
-                    lastRequestedId = messages[i].id;
-                }
-            }*/
+            for (var i = number; i < messages.length; i++) 
+                requiredMessages.push(messages[i].message);
             return requiredMessages;
         },
         getMessagesId: function(number) {
             var requiredMessages = []
-            if (number < messages.length)
-                requiredMessages.push(messages[number].id);
-            /*for (var i = 0; i < Math.min(number + 1, messages.length); i++) {
-                if (messages[i].id > lastRequestedId) {
-                    requiredMessages.push({
-                        name: messages[i].name,
-                        email: messages[i].email,
-                        avatar: messages[i].avatar,
-                        message: messages[i].message,
-                        timestamp: messages[i].timestamp
-                    });
-                    lastRequestedId = messages[i].id;
-                }
-            }*/
+            for (var i = number; i < messages.length; i++) 
+                requiredMessages.push(messages[i].id);
             return requiredMessages;
         },
         addMessage: function(message) {
@@ -58,12 +33,18 @@
             for (i = messages.length - 1; i >= 0; i--) {
                 if (messages[i].id == id) {
                     messages.splice(i, 1);
-                    return;
+                    return id;
                 }
             }
+            return -1;
         },
         getMessagesCount: function() {
             return messages.length;
+        },
+        getLastMessageId: function() {
+            if (messages.length == 0)
+                return 0;
+            return messages[messages.length - 1].id;
         }
     };
 }));   
