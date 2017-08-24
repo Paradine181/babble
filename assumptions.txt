@@ -1,0 +1,2 @@
+I assume that a unregistered user should not see the content of the chat until he logs in.
+That's why all the channel's data is retrieved only after logging in.
